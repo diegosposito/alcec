@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<chart caption="Nuevos Inscriptos por Lugar de Nacimiento" xAxisName="Lugar de Origen" yAxisName="Cantidades" showValues="0" decimals="0" formatNumberScale="0" chartRightMargin="30">
+  <set label="Concepci&#xF3;n del Uruguay" value="96"/>
+  <set label="Col&#xF3;n" value="14"/>
+  <set label="Gualeguaych&#xFA;" value="9"/>
+  <set label="Concordia" value="6"/>
+  <set label="Villa Elisa" value="6"/>
+  <set label="San Jos&#xE9;" value="6"/>
+  <set label="Chajar&#xED;" value="4"/>
+  <set label="Capital Federal" value="4"/>
+  <set label="Basavilbaso" value="3"/>
+  <set label="Paysand&#xFA;" value="3"/>
+  <set label="Villaguay" value="2"/>
+  <set label="Capital Federal" value="2"/>
+  <set label="Urdinarrain" value="2"/>
+  <set label="Rosario" value="2"/>
+  <set label="Corrientes" value="1"/>
+  <set label="Ushuaia" value="1"/>
+  <set label="Lanus" value="1"/>
+  <set label="Chajari" value="1"/>
+  <set label="Santa Rosa De Calamu" value="1"/>
+  <set label="Avellaneda" value="1"/>
+  <set label="Crespo" value="1"/>
+  <set label="Colonia Elia" value="1"/>
+  <set label="Colonia Caseros" value="1"/>
+  <set label="Clorinda" value="1"/>
+  <set label="Los Antiguos" value="1"/>
+  <set label="Ing. Jacobacci" value="1"/>
+  <set label="Asunci&#xF3;n" value="1"/>
+  <set label="Rosario del Tala" value="1"/>
+  <set label="Santiago" value="1"/>
+  <set label="San Justo" value="1"/>
+  <set label="San Salvador" value="1"/>
+  <set label="Santa Anita" value="1"/>
+  <set label="Santa Fe" value="1"/>
+  <set label="Nogoya" value="1"/>
+  <set label="Paran&#xE1;" value="1"/>
+  <set label="Gualeguay" value="1"/>
+  <set label="Villa Paranacito" value="1"/>
+  <set label="Villa del Rosario" value="1"/>
+  <set label="Federaci&#xF3;n" value="1"/>
+  <set label="San Fernando" value="1"/>
+  <set label="Buenos Aires" value="1"/>
+  <set label="Villa Libertador General San Mart&#xED;n" value="1"/>
+</chart>

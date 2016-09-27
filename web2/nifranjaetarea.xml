@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<chart caption="Ingreso por A&#xF1;o y Estado" xAxisName="Meses del A&#xF1;o" yAxisName="Cantidades" showValues="0" decimals="0" formatNumberScale="0" chartRightMargin="30">
+  <set label="Agosto" value="180.00"/>
+  <set label="Julio" value="180.00"/>
+  <set label="Junio" value="360.00"/>
+  <set label="Mayo" value="720.00"/>
+</chart>

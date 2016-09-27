@@ -39,8 +39,8 @@ class sfGuardAuthActions extends BasesfGuardAuthActions
 	        	$values = $this->form->getValues(); 
 	        	$this->getUser()->signin($values['user'], array_key_exists('remember', $values) ? $values['remember'] : false);
 	      
-				$this->getUser()->setAttribute('id_area', $user->getProfile()->getIdarea());
-				$this->getUser()->setAttribute('id_sede', $user->getProfile()->getIdsede());
+				$this->getUser()->setAttribute('id_area', '1');
+				$this->getUser()->setAttribute('id_sede', '1');
 				$this->getUser()->setAttribute('id_sistema', 2);
 			}
 		} else {

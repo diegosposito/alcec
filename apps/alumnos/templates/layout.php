@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
+    <title>CIRCULO ODONTOLOGICO CONCEPCION DEL URUGUAY</title>
     <?php include_http_metas() ?>
     <?php include_metas() ?>
     <?php include_title() ?>
@@ -15,6 +16,8 @@
     <?php use_stylesheet('superfish-vertical.css') ?>
     <?php use_stylesheet('superfish-navbar.css') ?>
     <?php use_stylesheet('ddaccordion.css') ?>
+    <?php use_stylesheet('style.css') ?>
+    <?php use_stylesheet('prettyCheckboxes.css') ?>
     
     <?php //use_javascript('webcam.js') ?>       
     <?php use_javascript('hoverIntent.js') ?>
@@ -25,11 +28,15 @@
     <?php use_javascript('tiny_mce/tiny_mce.js') ?>    
     <?php use_javascript('jquery.ui.timepicker.js') ?>
     <?php use_javascript('jquery.tablescroll.js') ?>
+    <?php use_javascript('jquery-1.7.min.js') ?>
+    <?php use_javascript('jquery.jcarousel.js') ?>
+    <?php use_javascript('DD_belatedPNG-min.js') ?>
+    <?php use_javascript('functions.js') ?>
     <?php use_javascript('ddaccordion.js') ?>
  
     <?php include_stylesheets() ?>
     <?php include_javascripts() ?>
-<script type="text/javascript">
+    <script type="text/javascript">
 	// initialise plugins
 	jQuery(function(){
 		$('ul.sf-menu sf-navbar').superfish({
@@ -42,7 +49,6 @@
 		}); 
 	});
 </script> 
-
 <script type="text/javascript">
 ddaccordion.init({
 	headerclass: "submenuheader", //Shared CSS class name of headers group
@@ -67,120 +73,154 @@ ddaccordion.init({
 </script>
 </head>
 <body>
-<table align="center" bgcolor="#ffffff" border="0" width="500">
-  <tbody>
-    <tr>
-      <td>
-      <table border="0" width="100%" cellpadding="0" cellspacing="0">
-          <tr>
-            <td colspan="2">
-            <img alt="" src="<?php echo $sf_request->getRelativeUrlRoot();?>/images/alcec3.jpg">
-            </td>
-          </tr>
-          <tr height="21px" bgcolor="#707173">
-          	<?php $esalumno=false; ?>
-			<?php if ($sf_user->isAuthenticated()) { ?>
-            <td align="center" >
-			 	<div class="sf-menu-container">
-					<ul class="sf-menu sf-navbar">
-					<?php
-						$esalumno = false;
-						$credencial = '';
-						$arrCredenciales = array();
-						foreach ($sf_user->getCredentials() as $credencial) {
-							array_push($arrCredenciales, $credencial); 
-						}
-						$sis=$sf_user->getGuardUser()->obtenerSistemas();
-					?>
-					<?php foreach ($sis as $sistema) { ?>
-						<li>
-							<a href="<?php echo $url; ?>"><?php echo $sistema->getDescripcion(); ?></a>
-						</li>
-					<?php } ?>							
-					</ul>
-				</div>
-            </td>
-            <td align="right" >
-            	<font color="#ffffff"><b><?php echo $sf_user->getGuardUser()->getUsername().' (<a href="'.url_for('@sf_guard_signout').'">Salir</a>)'; ?></b><br>
-				<b>Perfil: Administrador</b>
-				<?php	
-				$credencial = '';
-				$arrCredenciales = array();
-			?></font>         
-			</td>            
-			<?php } else { ?>
-			<td colspan="2">&nbsp</td>	
-            <?php } ?>   
-          </tr>          
-      </table>
-	<?php if($esalumno){ ?>
-	  <table><a href="">INGRESAR DESDE AQUI</a></table>
-	<?php 
-		exit;
-	}; ?>
-      <table border="0" cellpadding="0" bgcolor="#ffffff" cellspacing="0" width="100%">
-        <tbody>
-          <tr>
-            <td width="190" valign="top" >
- 				<div class="glossymenu">               
-            		<?php $mensaje_usuario=''; ?>
-		            <?php if ($sf_user->isAuthenticated()) { 
-						$sf_user->setAttribute('idsede',$sf_user->getProfile()->getIdsede());
-						$q = Doctrine_Query::create()
-							->distinct(true)
-							->from('Menu m')
-							->Where('m.idsistema = 1')
-							->andWhereIn('m.credencial', $arrCredenciales)
-							->orderBy('m.idgrupomenu, m.orden');
-						          	
-						$opciones_menu = $q->execute();     
+<?php
+	$autenticated =false;
+	if ($sf_user->isAuthenticated()) { 
+	    $esalumno = false;
+	    $autenticated =true;
+	    $credencial = '';
+		$arrCredenciales = array();
+		foreach ($sf_user->getCredentials() as $credencial) {
+			array_push($arrCredenciales, $credencial); 
+		}
+		$sis=$sf_user->getGuardUser()->obtenerSistemas();
+		$sf_user->setAttribute('idsede',$sf_user->getProfile()->getIdsede());
+	}	
+?>
+
+	<div class="shell">
+		<!-- Header -->
+		<div id="header">
+			<div class="cl"></div>
+			<!-- Logo -->
+			<img alt="Smiley face" height="142" width="940" src="<?php echo $sf_request->getRelativeUrlRoot();?>/images/header.png">
+
+			<?php if ($autenticated){ ?>
+			<p align="right"><?php echo '<b>Usuario:</b> '.$sf_user->getGuardUser()->getUsername(); ?> </p>
+			<?php } ?>
+			
 		
-						$grupo_menu_anterior = '';
-						$grupo_menu = '';
-						foreach ($opciones_menu as $item) {
-							$grupo_menu = $item->getIdgrupomenu();
-							
-							if($grupo_menu <> $grupo_menu_anterior) {
-								if ($grupo_menu_anterior != '') {
-									echo '</ul></div>';
-								}
-								echo '<a class="menuitem submenuheader" href="" >'.$item->getGrupomenu()->getDescripcion().'</a><div class="submenu"><ul>';
-							}
-							echo '<li>'.link_to($item->getDescripcion(), $item->getModulo()).'</li>' ;						              
-							$grupo_menu_anterior = $grupo_menu;
-						}		
-						echo '</ul></div>';	
-            		} ?> 
-            	</div>
-      		</td>
-            <td valign="top" style="border-left:1px solid #fcdb1c;">
-            <div id="column2">
-				<?php 
-					echo $mensaje_usuario;
-					echo $sf_content;
-				?>
+			<!-- END Top Navigation -->	
+		</div>
+		<!-- END Header -->
+		<!-- Navigation -->
+		<div id="navigation">
+			<ul>
+				<li>
+					<a title="Profesionales" href="<?php echo url_for('ingreso/index') ?>"><span class="sep-left"></span>Inicio<span class="sep-right"></span></a>
+				</li>
+				<li>
+					<a title="Profesionales" href="<?php echo url_for('informes/profesionales') ?>"><span class="sep-left"></span>Socios<span class="sep-right"></span></a>
+				</li>
+				<li>
+					<a title="Profesionales" href="<?php echo url_for('informes/padronsocios') ?>"><span class="sep-left"></span>Padron Socios<span class="sep-right"></span></a>
+				</li>
+				<li>
+					<a title="Estadísticas" href="#"><span class="sep-left"></span>Estadísticas<span class="sep-right"></span></a>
+					<div class="dd">
+						<ul>
+							<li><a title="Autoridades" href="<?php echo url_for('graficos/nuevosinscriptos') ?>"><span class="sep-left"></span>Evolución de Socios</a></li>
+							<li><a title="Historia" href="<?php echo url_for('graficos/nifranjaetareaxcarrera') ?>"><span class="sep-left"></span>Evolución de Ingresos</a></li>
+						</ul>
+					</div>
+				</li>
+				<li>
+					<a title="Contacto" href="#"><span class="sep-left"></span>Contacto<span class="sep-right"></span></a>
+					<div class="dd">
+						<ul>
+							<li><a title="Ubicacion" href="<?php echo url_for('ingreso/ubicacion') ?>"><span class="sep-left"></span>Ubicación</a></li>
+							<li><a title="Concacto" href="<?php echo url_for('ingreso/contacto') ?>"><span class="sep-left"></span>Contacto</a></li>
+						</ul>
+					</div>
+				</li>
+			</ul>
+			<div class="cl"></div>
+		</div>
+		<!-- END Navigation -->
+		<!-- Main  -->
+		<div id="main">
+			<!-- Slider -->
+			<!-- <div id="slider-holder">				
+				
+			</div> -->
+			<!-- END Slider -->
+
+            <!-- Content -->
+			<div id="content">				
+				 <?php echo $sf_content; ?>
 			</div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      </td>
-    </tr>
-  </tbody>
-  <tfoot>
-  	<tr>
-      <td>
-			<table width="100%" border="0">
-				<tr>
-					<td>
-					<img alt="" src="<?php echo $sf_request->getRelativeUrlRoot();?>/images/alcec2.jpg">
-					</td>
-				</tr> 
-			</table>
-	  </td>
-      </tr>
-  </tfoot>
-</table>
-<p style="text-align: center;"><small>copyright © 2016 A.L.C.E.C. | dsposito@gmail.com</small><br>
-</p>
-</body></html>
+			<!-- ЕND Content  -->
+			<!-- Sidebar -->
+			<?php if ($autenticated){ ?>
+					<div id="sidebar">
+						<div class="box">
+							<h2>Gestión General</h2>
+							<ul>
+							    <?php   if ($autenticated){
+							                if ($sf_user->getGuardUser()->getIsSuperAdmin()) {
+							    	            echo '<li>'.link_to('Usuarios', 'sf_guard_user').'</li>' ; 
+							    	        } 
+							    	    } ?>   
+								<?php echo '<li>'.link_to('Socios', 'personas/buscar').'</li>' ; ?>
+								<?php echo '<li>'.link_to('Cobradores', 'personas/buscarcobrador').'</li>' ; ?>
+								<?php echo '<li>'.link_to('Generar Recibos', 'personas/generarrecibos').'</li>' ; ?>
+								<?php echo '<li>'.link_to('Gestión de Recibos', 'personas/gestionrecibosgenerados').'</li>' ; ?>
+								<?php echo '<li>'.link_to('Gestión Contenido', 'personas/new').'</li>' ; ?>
+								<?php echo '<li>'.link_to('Salir', 'sf_guard_signout').'</li>' ; ?>
+							</ul>
+						</div>
+					</div>	
+			<?php } else { ?>	
+				     <div id="sidebar">
+
+				        <div class="box" style="width=200px"><br></div>	
+				        
+					    <div class="box" style="background-color:#7dbf0d;width=200px">
+								<p style="text-align:center;color:#ffffff;font-weight:bold"><a style="text-align:left;color:#ffffff;font-weight:bold" href="<?php echo url_for('guard/login') ?>">Administrador</a></p>
+						</div>
+						<div class="box" style="width=200px">
+							<a  href="<?php echo url_for('guard/login') ?>"><img alt="Smiley face"  src="<?php echo $sf_request->getRelativeUrlRoot();?>/images/login.png"></a>
+						</div>
+                        <div class="box" style="background-color:#7dbf0d;width=200px">
+								<p style="text-align:center;color:#ffffff;font-weight:bold">Circulo Odontologico</p>
+						</div>
+						<div class="box" style="width=200px">
+							<img alt="Smiley face" height="100" width="220" src="<?php echo $sf_request->getRelativeUrlRoot();?>/images/cop.jpeg">
+						</div>
+                        <br>
+						<div class="box" style="background-color:#7dbf0d;width=200px">
+								<p style="text-align:center;color:#ffffff;font-weight:bold">&nbsp;&nbsp;Saludent</p>
+						</div>
+						<div class="box" style="width=200px">
+							<img alt="Smiley face" height="100" width="220" src="<?php echo $sf_request->getRelativeUrlRoot();?>/images/saludent.jpg">
+						</div>
+                        <br>
+                        <div class="box" style="background-color:#7dbf0d;width=200px">
+								<p style="text-align:center;color:#ffffff;font-weight:bold">&nbsp;&nbsp;S.O.S.P.E.</p>
+						</div>
+						<br>
+                        <div class="box" style="width=200px">
+							<img alt="Smiley face" height="100" width="220" src="<?php echo $sf_request->getRelativeUrlRoot();?>/images/sospe logo.gif">
+						</div>
+                        <br>
+					
+					</div>	 
+			<?php } ?>	
+			<!-- END Sidebar -->
+			<div class="cl"></div>
+			<!-- Feartured Products -->
+			<div class="products featured">
+			</div>
+			<!-- END Featured Products -->			
+			<!-- Footer  -->
+			<div id="footer">
+				<div id="footer-bottom">
+					<p style="color:black;">&copy;Copyright  A.L.C.E.C. Diseñado por <a style="color:black;" href="#">C.del U.</a></p>
+				</div>
+			</div>
+			<!-- END Footer -->
+		</div>
+		<!-- END Main -->
+	</div>	
+</body>
+</html>

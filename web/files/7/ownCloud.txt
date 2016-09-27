@@ -1,0 +1,22 @@
+Instalar owncloud
+
+https://www.computersnyou.com/5409/install-owncloud-9-server-ubuntu/
+
+wget -qO - https://download.owncloud.org/download/repositories/stable/xUbuntu_14.04/Release.key | sudo apt-key add - 
+
+echo 'deb http://download.owncloud.org/download/repositories/stable/xUbuntu_14.04/ /' | sudo tee /etc/apt/sources.list.d/owncloud.list 
+
+sudo apt-get update 
+sudo apt-get install owncloud 
+
+En
+http://YOURSERVERIP/owncloud se siguen las instrucciones de instalacion.
+Debe sacarse de /var/www el oncloud por seguridad, y cambmiar sqlite3 por MySQL o PostgresSQL.
+
+https://gist.github.com/mlgill/195721d3ee6702085ec5
+
+https://www.howtoforge.com/tutorial/owncloud_9-installation-on-debian_8/   (seguir este tutorial para la instalacion)
+
+
+
+ 

@@ -40,4 +40,9 @@ class ingresoActions extends sfActions
   {
     $this->msgerror = $request->getParameter('msgerror');
   }
+
+  public function executeUbicacion(sfWebRequest $request)
+  {
+  
+  }
 }

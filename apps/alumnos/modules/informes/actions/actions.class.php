@@ -1952,7 +1952,7 @@ class informesActions extends sfActions
 		$current_date = date("Y");
 		$encabezado = '
 			<div style="text-align: center; font-family: Times New Roman,Times,serif;"><span
-			style="font-size: 12;"><img src="'.$request->getRelativeUrlRoot().'/images/alcec3.jpg" width="550px">
+			style="font-size: 12;"><img src="'.$request->getRelativeUrlRoot().'/images/header.png" width="550px">
 			Padron Socios: '.$current_date.'</div>';        
 
 		$pdf->writeHTML($encabezado, true, false, true, false, '');   
@@ -1992,7 +1992,7 @@ class informesActions extends sfActions
 
 				$encabezado = '
 			<div style="text-align: center; font-family: Times New Roman,Times,serif;"><span
-			style="font-size: 12;"><img src="'.$request->getRelativeUrlRoot().'/images/alcec3.jpg" width="550px">
+			style="font-size: 12;"><img src="'.$request->getRelativeUrlRoot().'/images/header.png" width="550px">
 			Padron Socios: '.$current_date.'</div>';        
 	
 				$pdf->writeHTML($encabezado, true, false, true, false, '');   

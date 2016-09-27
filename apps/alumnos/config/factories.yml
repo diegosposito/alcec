@@ -19,8 +19,8 @@ prod:
           host:       smtp.gmail.com
           port:       465
           encryption: ssl
-          username:   tramitesalumnos@aelf.edu.ar
-          password:   522ucu2013
+          username:   dsposito@gmail.com
+          password:   fleet1947
 
 test:
   storage:
@@ -45,8 +45,8 @@ test:
           host:       smtp.gmail.com
           port:       465
           encryption: ssl
-          username:   tramitesalumnos@aelf.edu.ar
-          password:   522ucu2013
+          username:   dsposito@gmail.com
+          password:   fleet1947
 
 dev:
   mailer:
@@ -61,8 +61,8 @@ dev:
           host:       smtp.gmail.com
           port:       465
           encryption: ssl
-          username:   tramitesalumnos@aelf.edu.ar
-          password:   522ucu2013
+          username:   dsposito@gmail.com
+          password:   fleet1947
 
 all:
   routing:

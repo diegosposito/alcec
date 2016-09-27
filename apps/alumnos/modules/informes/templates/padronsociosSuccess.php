@@ -15,7 +15,7 @@
     <tfoot>
       <tr>
         <td colspan="2" align="center">
-          <input type="submit" value="Aceptar" />
+          <input type="submit" value="Imprimir" />
         </td>
       </tr>
     </tfoot>

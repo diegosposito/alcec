@@ -1,0 +1,14 @@
+php artisan make:controller IvasController   (php artisan route:list) para chequear
+
+En app/http/routes.php   agregamos Route::resource('ivas', 'IvasController');
+
+php artisan make:model Iva -m
+
+Modificar migracion y adaptarlo al modulo que se esta creando, 
+
+luego ejecutar: php artisan migrate
+
+En app/http/requests , app/repositories y resources/views crear carpetas con el nuevo modulo y logica
+
+En app/providers agregar AccessServiceProvider.php agregar el nuevo modulo
+
