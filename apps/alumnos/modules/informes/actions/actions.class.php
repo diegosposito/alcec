@@ -1942,6 +1942,9 @@ class informesActions extends sfActions
 	public function executePadronsocios()	{	
 	}
 
+	public function executeEstadisticas()	{	
+	}
+
 	// Plan de estudios (PDF)
 	public function executePadronsociospdf(sfWebRequest $request)	{	
 		
@@ -1961,12 +1964,12 @@ class informesActions extends sfActions
 		$current_date = date("Y");
 		$encabezado = '
 			<div style="text-align: center; font-family: Times New Roman,Times,serif;"><span
-			style="font-size: 12;"><img src="'.$request->getRelativeUrlRoot().'/images/header.png" width="550px">
+			style="font-size: 12;"><img src="'.$request->getRelativeUrlRoot().'/images/header.png" height="80px" width="550px">
 			Padron Socios: '.$current_date.'</div>';        
 
 		$pdf->writeHTML($encabezado, true, false, true, false, '');   
 		
-		$y = 60;
+		$y = 45;
 		$pdf->SetXY(10,$y);
 		$pdf->Cell(10,5,'Nro',0,0,'C');    
 		$pdf->SetXY(20,$y);
@@ -2001,11 +2004,11 @@ class informesActions extends sfActions
 
 				$encabezado = '
 			<div style="text-align: center; font-family: Times New Roman,Times,serif;"><span
-			style="font-size: 12;"><img src="'.$request->getRelativeUrlRoot().'/images/header.png" width="550px">
+			style="font-size: 12;"><img src="'.$request->getRelativeUrlRoot().'/images/header.png" height="80px" width="550px">
 			Padron Socios: '.$current_date.'</div>';        
 	
 				$pdf->writeHTML($encabezado, true, false, true, false, '');   
-				$y=60;
+				$y=45;
 
 			}
 	
