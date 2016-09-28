@@ -76,7 +76,7 @@
 					<a title="Profesionales" href="<?php echo url_for('personas/buscarcobrador') ?>"><span class="sep-left"></span>Cobradores<span class="sep-right"></span></a>
 				</li>
 				<li>
-					<a title="Estadísticas" href="#"><span class="sep-left"></span>Estadísticas<span class="sep-right"></span></a>
+					<a title="Estadísticas" href="<?php echo url_for('informes/estadisticas') ?>"><span class="sep-left"></span>Estadísticas<span class="sep-right"></span></a>
 					<div class="dd">
 						<ul>
 							<li><a title="Autoridades" href="<?php echo url_for('graficos/nuevosinscriptos') ?>"><span class="sep-left"></span>Evolución de Socios</a></li>
@@ -85,13 +85,7 @@
 					</div>
 				</li>
 				<li>
-					<a title="Contacto" href="#"><span class="sep-left"></span>Contacto<span class="sep-right"></span></a>
-					<div class="dd">
-						<ul>
-							<li><a title="Ubicacion" href="<?php echo url_for('ingreso/ubicacion') ?>"><span class="sep-left"></span>Ubicación</a></li>
-							<li><a title="Concacto" href="<?php echo url_for('ingreso/contacto') ?>"><span class="sep-left"></span>Contacto</a></li>
-						</ul>
-					</div>
+					<a title="Ubicacion" href="<?php echo url_for('ingreso/ubicacion') ?>"><span class="sep-left"></span>Ubicación<span class="sep-right"></span></a>
 				</li>
 			</ul>
 			<div class="cl"></div>
@@ -123,7 +117,7 @@
 							    	    } ?>   
 								<?php echo '<li>'.link_to('Socios', 'personas/buscar').'</li>' ; ?>
 								<?php echo '<li>'.link_to('Cobradores', 'personas/newcobrador').'</li>' ; ?>
-								<?php echo '<li>'.link_to('Generar Recibos', 'personas/generarrecibos').'</li>' ; ?>
+								<?php echo '<li>'.link_to('Nuevos Recibos', 'personas/generarrecibos').'</li>' ; ?>
 								<?php echo '<li>'.link_to('Gestión de Recibos', 'personas/gestionrecibosgenerados').'</li>' ; ?>
 								<?php echo '<li>'.link_to('Gestión Contenido', 'personas/new').'</li>' ; ?>
 								<?php echo '<li>'.link_to('Salir', 'sf_guard_signout').'</li>' ; ?>
