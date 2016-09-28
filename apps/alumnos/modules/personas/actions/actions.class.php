@@ -214,7 +214,96 @@ Sede: '.$oSede.'
 
    }
 
-   public function executeImprimirrecibosseleccionados(sfWebRequest $request)
+   public function executeImprimirrecibosseleccionados(sfWebRequest $request){
+   	  $this->msgSuccess = $request->getParameter('msgSuccess', '');
+        $this->msgError = $request->getParameter('msgError', '');
+
+        $arr_idrecibosgenerados = array();
+           
+        // Obtiene designaciones seleccionadas en la vista en un array
+        $idcase = $request->getParameter('idcase', '');
+
+        foreach($idcase as $seleccionados){
+            if(is_numeric($seleccionados)) 
+                $arr_idrecibosgenerados[] = $seleccionados;
+        }
+
+        // Si existen para generar recibos
+         if ( count($arr_idrecibosgenerados)>0 ){
+                $resultado = Doctrine_Core::getTable('Personas')->obtenerRecibosGeneradosPorIds($arr_idrecibosgenerados);
+        } else {
+               $estado='No hay recibos generados seleccionados';
+               $this->redirect($this->generateUrl('default', array('module' => 'personas',
+                'action' => 'generarrecibos', 'msgError' => $estado )));
+        }
+
+        // COMIENZA LA IMPRESION DE RECIBOS
+
+		$pdf = new PDF();
+
+		$pdf->SetFont("Times", "", 9);
+		$pdf->setPrintHeader(false);
+		$pdf->setPrintFooter(false); 
+ 
+		$pdf->AddPage();
+		$current_date = date("Y");
+		
+		$x=30;
+		$y = 10;
+		$contador = 0;
+		$contimg = 100;
+		$inicio = 0;
+		
+		$border = array('LRTB' => array('width' => 0.1, 'cap' => 'square', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
+
+	
+	    foreach ($resultado as $socio){	
+
+	    	$contimg = ($contimg==0 ? 100 : 0);
+	    	$x = ($x==30 ? 130 : 30);
+	    	$inicio = $y;
+
+	    	$pdf->Image('images/alcecrecib.png', $contimg, 0, 95, 0, 'PNG', '', '', false, 300, '', false, false, $border, false, false, false); 
+		    			    		
+		   	$pdf->SetXY($x,$y);
+            $pdf->Cell($x,5,'Recibo nro. '.$socio['id'],0,0,'L');
+            $y+=5;
+		    $pdf->SetXY($x,$y);        
+		    $pdf->Cell($x,5,$socio['socio'],0,0,'L');
+		    $y+=5;        
+		    $pdf->SetXY($x,$y); 
+		    $pdf->Cell($x,5,$socio['mesanio'],0,0,'L'); 
+		    $y+=5;
+		    $pdf->SetXY($x,$y); 
+		    $pdf->Cell($x,5,$socio['monto'],0,0,'L'); 
+
+		    $contador++;
+
+		    if (!($contador % 2==0)){
+		    	$y = $inicio;
+		    } else {
+		    	$y+=30;
+		    }
+		    
+		
+ 			if($y>=265) {
+				$pdf->AddPage();
+				$y=10;
+			}
+	
+		} // fin (foreach)	
+
+			 
+		$pdf->Output('recibos.pdf', 'I');
+ 
+		// stop symfony process
+		throw new sfStopException();
+				
+		return sfView::NONE;
+   }
+
+
+   public function executeImprimirrecibosseleccionados2(sfWebRequest $request)
     {
         $this->msgSuccess = $request->getParameter('msgSuccess', '');
         $this->msgError = $request->getParameter('msgError', '');
