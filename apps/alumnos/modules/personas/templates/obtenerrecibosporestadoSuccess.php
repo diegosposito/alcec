@@ -30,10 +30,9 @@ $(document).ready(function(){
         <?php } ?>
 
         <td width="40%" align="center" class="hed">Socio</td>
-        <td width="10%" align="center" class="hed">Mes</td>
+        <td width="10%" align="center" class="hed">Fecha</td>
         <td width="10%" align="center" class="hed">Monto</td>
-        <td width="35%" align="center" class="hed">Cobrador</td>
-        <td width="5%" align="center" class="hed">Eliminar</td>
+        <td width="40%" align="center" class="hed">Cobrador</td>
     </tr>
     </thead>
     <tbody>
@@ -46,8 +45,7 @@ $(document).ready(function(){
         <td width="40%"><?php echo $item['socio'] ?></td>
         <td width="10%"><?php echo $item['mesanio'] ?></td>
         <td width="10%"><?php echo '$'.$item['monto'] ?></td>
-        <td width="35%"><?php echo $item['cobrador'] ?></td>
-        <td width="5%"><?php echo $item['cobrador'] ?></td>
+        <td width="40%"><?php echo $item['cobrador'] ?></td>
       </tr>
       <?php } ?>
     </tbody>
