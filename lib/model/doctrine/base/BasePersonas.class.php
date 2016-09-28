@@ -26,6 +26,7 @@
  * @property string $telefono
  * @property string $celular
  * @property string $direccion
+ * @property string $direccioncobro
  * @property boolean $tienefoto
  * @property boolean $activo
  * @property boolean $socio
@@ -60,6 +61,7 @@
  * @method string              getTelefono()                 Returns the current record's "telefono" value
  * @method string              getCelular()                  Returns the current record's "celular" value
  * @method string              getDireccion()                Returns the current record's "direccion" value
+ * @method string              getDireccioncobro()           Returns the current record's "direccioncobro" value
  * @method boolean             getTienefoto()                Returns the current record's "tienefoto" value
  * @method boolean             getActivo()                   Returns the current record's "activo" value
  * @method boolean             getSocio()                    Returns the current record's "socio" value
@@ -93,6 +95,7 @@
  * @method Personas            setTelefono()                 Sets the current record's "telefono" value
  * @method Personas            setCelular()                  Sets the current record's "celular" value
  * @method Personas            setDireccion()                Sets the current record's "direccion" value
+ * @method Personas            setDireccioncobro()           Sets the current record's "direccioncobro" value
  * @method Personas            setTienefoto()                Sets the current record's "tienefoto" value
  * @method Personas            setActivo()                   Sets the current record's "activo" value
  * @method Personas            setSocio()                    Sets the current record's "socio" value
@@ -246,6 +249,13 @@ abstract class BasePersonas extends sfDoctrineRecord
              'length' => 200,
              ));
         $this->hasColumn('direccion', 'string', 200, array(
+             'type' => 'string',
+             'primary' => false,
+             'notnull' => true,
+             'default' => '',
+             'length' => 200,
+             ));
+        $this->hasColumn('direccioncobro', 'string', 200, array(
              'type' => 'string',
              'primary' => false,
              'notnull' => true,

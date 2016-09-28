@@ -155,7 +155,8 @@ Sede: '.$oSede.'
 
     public function executeGenerarrecibos(sfWebRequest $request)
     {
-	    $this->msgSuccess = $request->getParameter('msgSuccess', '');
+	  
+        $this->msgSuccess = $request->getParameter('msgSuccess', '');
 	    $this->msgError = $request->getParameter('msgError', '');
 	     
 	    // solo usuarios de sede central pueden asignar resoluciones
@@ -171,7 +172,6 @@ Sede: '.$oSede.'
 	    $this->sedes = Doctrine_Core::getTable('Sedes')->findAll();
 	      
 	    $this->idsede = $idsede;
-     
     }
 
     public function executeGestionrecibosgenerados(sfWebRequest $request)
@@ -328,12 +328,12 @@ Sede: '.$oSede.'
     
     if($request->getParameter('inicio')){
     	$fechaa = explode("/", $request->getParameter('inicio'));
-        $fechadesde = $fechaa[2]."-".$fechaa[0]."-".$fechaa[1]; 
+        $fechadesde = $fechaa[2]."-".$fechaa[1]."-".$fechaa[0]; 
     }
     
     if($request->getParameter('fin')){
     	 $fechab = explode("/", $request->getParameter('fin'));
-         $fechahasta = $fechab[2]."-".$fechab[0]."-".$fechab[1]; 
+         $fechahasta = $fechab[2]."-".$fechab[1]."-".$fechab[0]; 
     }
    
 
@@ -1002,6 +1002,16 @@ Sede: '.$oSede.'
       $personas = $form->save();
       $nrodoc = preg_replace("/[^\d]/", "", $personas->getNumeroDoc());
       $personas->setNroDoc($nrodoc);
+      $personas->setDireccioncobro($request->getPostParameter('personas[direccioncobro]'));
+      $personas->setIdsexo($request->getPostParameter('personas[idsexo]'));
+      $personas->setIdtipodoc($request->getPostParameter('personas[idtipodoc]'));
+      $personas->setIdcobrador($request->getPostParameter('personas[idcobrador]'));
+      $personas->setMonto($request->getPostParameter('personas[monto]'));
+      if ($request->getPostParameter('personas[activo]') == 'on') {
+           $personas->setActivo(1);
+      } else {
+          	$personas->setActivo(0);
+      }
       $personas->save();
 
       $this->redirect('personas/edit?idpersona='.$personas->getIdpersona());
@@ -1017,6 +1027,18 @@ Sede: '.$oSede.'
       $nrodoc = preg_replace("/[^\d]/", "", $personas->getNumeroDoc());
       $personas->setNroDoc($nrodoc);
       $personas->setSocio(false);
+      $personas->setEmail($request->getPostParameter('personas[email]'));
+      $personas->setTelefono($request->getPostParameter('personas[telefono]'));
+      $personas->setIdsexo($request->getPostParameter('personas[idsexo]'));
+      $personas->setIdtipodoc($request->getPostParameter('personas[idtipodoc]'));
+      $personas->setCelular($request->getPostParameter('personas[celular]'));
+      $personas->setDireccion($request->getPostParameter('personas[direccion]'));
+      if ($request->getPostParameter('personas[activo]') == 'on') {
+           $personas->setActivo(1);
+      } else {
+          	$personas->setActivo(0);
+      }
+      $personas->setOtrainformacionrelevante($request->getPostParameter('personas[otrainformacionrelevante]'));
       $personas->save();
 
       $this->redirect('personas/editcobrador?idpersona='.$personas->getIdpersona());

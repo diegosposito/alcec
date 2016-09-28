@@ -1,10 +1,10 @@
 <script>
 
 $(document).ready(function(){
-
-    $("#inicio").datepicker();
-    $("#fin").datepicker();
- 
+    
+    $("#inicio").mask("99/99/9999");
+    $("#fin").mask("99/99/9999");
+    
     $('#botonlista').click(function() {
     // guardar la informacion de documentacion adicional del alumnos ingresada
         $.post("<?php echo url_for('personas/obtenerrecibosporestado'); ?>",

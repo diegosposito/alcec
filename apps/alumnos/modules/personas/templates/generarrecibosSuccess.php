@@ -1,5 +1,4 @@
 <script>
-
 $(document).ready(function(){
  
     $('#botonlista').click(function() {
@@ -41,5 +40,4 @@ $(document).ready(function(){
   <br>
   <div id="idresultados" name="resultados" align="center"></div>
 </form>
-</div><br>
 
