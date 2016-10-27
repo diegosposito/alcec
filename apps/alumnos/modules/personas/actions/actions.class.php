@@ -10,6 +10,9 @@
  */
 class personasActions extends sfActions
 {
+	
+	// $this->estados = array(1=>'Generados',2=>'Cancelados',3=>'Cobrados');	
+
 	public function executeGuardarnombre(sfWebRequest $request) {
 		$oPersona = Doctrine_Core::getTable('Personas')->find($request->getParameter('idpersona'));
 		$nombreAnterior = $oPersona->getApellido().", ". $oPersona->getNombre();
@@ -18,7 +21,7 @@ class personasActions extends sfActions
 		$oPersona->setNombre(ucwords(strtolower($request->getParameter('nombre'))));
 		$oPersona->save();
 		
-		$destinatario = array('auditoriaacademica@ucu.edu.ar' => 'UCU - Auditoria Academica','informatica@ucu.edu.ar' => 'Dpto Informatica');
+		$destinatario = array('auditoriaacademica' => 'UCU - Auditoria Academica','informatica' => 'Dpto Informatica');
 
 		$remitente = $this->getUser()->getGuardUser()->getEmailAddress();
 		$oArea = Doctrine_Core::getTable('Areas')->find($this->getUser()->getProfile()->getIdarea());
@@ -300,6 +303,36 @@ Sede: '.$oSede.'
 		throw new sfStopException();
 				
 		return sfView::NONE;
+   }
+
+   public function executeMarcarcomocobrados(sfWebRequest $request){
+   	    $this->msgSuccess = $request->getParameter('msgSuccess', '');
+        $this->msgError = $request->getParameter('msgError', '');
+
+        $arr_idrecibosgenerados = array();
+
+
+           
+        // Obtiene designaciones seleccionadas en la vista en un array
+        $idcase = $request->getParameter('idcase', '');
+
+        foreach($idcase as $seleccionados){
+            if(is_numeric($seleccionados)) 
+                $arr_idrecibosgenerados[] = $seleccionados;
+        }
+
+        var_dump($arr_idrecibosgenerados);exit;
+
+        // Si existen para generar recibos
+         if ( count($arr_idrecibosgenerados)>0 ){
+                $resultado = Doctrine_Core::getTable('Personas')->obtenerRecibosGeneradosPorIds($arr_idrecibosgenerados);
+        } else {
+               $estado='No hay recibos generados seleccionados';
+               $this->redirect($this->generateUrl('default', array('module' => 'personas',
+                'action' => 'generarrecibos', 'msgError' => $estado )));
+        }
+
+        return sfView::NONE;
    }
 
 
@@ -607,6 +640,40 @@ Sede: '.$oSede.'
 		}
 		
 		return sfView::NONE;
+	}
+
+	// Gestion de cobros
+
+	public function executeGestioncobros(sfWebRequest $request)
+    {
+	    $this->msgSuccess = $request->getParameter('msgSuccess', '');
+	    $this->msgError = $request->getParameter('msgError', '');
+
+	    $this->cobradores = Doctrine_Core::getTable('Personas')->obtenerCobradores();
+
+	    $this->estados = array(1=>'Generados');	
+
+	    if ($request->isMethod(sfRequest::POST)){
+	    	$this->msgSuccess = 'Los registros fueron marcados como cobrados';
+	        $this->msgError = $request->getParameter('msgError', '');
+
+	        $arr_idrecibosgenerados = array();
+
+	        // Obtiene designaciones seleccionadas en la vista en un array
+	        $idcase = $request->getParameter('idcase', '');
+
+	        foreach($idcase as $seleccionados){
+	            if(is_numeric($seleccionados)) 
+	                $arr_idrecibosgenerados[] = $seleccionados;
+	        }
+
+	        // Si existen para generar recibos
+	        if ( count($arr_idrecibosgenerados)>0 ){
+	                $resultado = Doctrine_Core::getTable('Personas')->actualizarRecibosACobradosPorIds($arr_idrecibosgenerados);
+	        }
+
+	    } //endif
+	     
 	}
 	
 	public function executeModificar(sfWebRequest $request)	{
