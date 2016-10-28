@@ -251,7 +251,7 @@ Sede: '.$oSede.'
 		$pdf->AddPage();
 		$current_date = date("Y");
 		
-		$x=30;
+		$x=120;
 		$y = 10;
 		$contador = 0;
 		$Ximage = 100;
@@ -264,7 +264,7 @@ Sede: '.$oSede.'
 	    foreach ($resultado as $socio){	
 
 	    	$Ximage = ($Ximage==0 ? 100 : 0);
-	    	$x = ($x==30 ? 130 : 30);
+	    	$x = ($x==20 ? 120 : 20);
 	    	$inicio = $y;
 
 	    	$pdf->Image('images/alcecrecib.png', $Ximage, $Yimage, 80, 0, 'PNG', '', '', false, 300, '', false, false, $border, false, false, false); 
@@ -286,12 +286,12 @@ Sede: '.$oSede.'
 		    if (!($contador % 2==0)){
 		    	$y = $inicio;
 		    } else {
-		    	$y+=30;
+		    	$y+=25;
 		    	$Yimage+=40;
 		    }
 		    
 		
- 			if($y>=265 || $Yimage> 260) {
+ 			if($y>=250) {
 				$pdf->AddPage();
 				$y=10;
 				$Yimage=0;
