@@ -254,20 +254,20 @@ Sede: '.$oSede.'
 		$x=30;
 		$y = 10;
 		$contador = 0;
-		$contimg = 100;
+		$Ximage = 100;
 		$inicio = 0;
-		$yimage = 0;
+		$Yimage = 0;
 		
 		$border = array('LRTB' => array('width' => 0.1, 'cap' => 'square', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
 
 	
 	    foreach ($resultado as $socio){	
 
-	    	$contimg = ($contimg==0 ? 100 : 0);
+	    	$Ximage = ($Ximage==0 ? 100 : 0);
 	    	$x = ($x==30 ? 130 : 30);
 	    	$inicio = $y;
 
-	    	$pdf->Image('images/alcecrecib.png', $contimg, $yimage, 80, 0, 'PNG', '', '', false, 300, '', false, false, $border, false, false, false); 
+	    	$pdf->Image('images/alcecrecib.png', $Ximage, $Yimage, 80, 0, 'PNG', '', '', false, 300, '', false, false, $border, false, false, false); 
 		    			    		
 		   	$pdf->SetXY($x,$y);
             $pdf->Cell($x,5,'Recibo nro. '.$socio['id'],0,0,'L');
@@ -279,7 +279,7 @@ Sede: '.$oSede.'
 		    $pdf->Cell($x,5,$socio['mesanio'],0,0,'L'); 
 		    $y+=5;
 		    $pdf->SetXY($x,$y); 
-		    $pdf->Cell($x,5,$socio['monto'],0,0,'L'); 
+		    $pdf->Cell($x,5,$socio['monto'].$Yimage,0,0,'L'); 
 
 		    $contador++;
 
@@ -287,14 +287,14 @@ Sede: '.$oSede.'
 		    	$y = $inicio;
 		    } else {
 		    	$y+=30;
-		    	$yimage+=50;
+		    	$Yimage+=40;
 		    }
 		    
 		
- 			if($y>=265) {
+ 			if($y>=265 || $Yimage> 260) {
 				$pdf->AddPage();
 				$y=10;
-				$yimage=0;
+				$Yimage=0;
 			}
 	
 		} // fin (foreach)	
