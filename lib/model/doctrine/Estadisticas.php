@@ -89,7 +89,7 @@ class Estadisticas extends sfDoctrineRecord
 		Doctrine_Manager::getInstance()->setCollate('utf8_general_ci');
 
 		$sql = "SELECT per.apellido, per.nombre, CONCAT(per.apellido, ', ', per.nombre) as apellidonombre, rg.mesanio, rg.anio, rg.monto, CONCAT(per2.apellido, ', ', per2.nombre) as cobrador FROM recibos_generados rg JOIN personas per ON rg.idpersona = per.idpersona LEFT JOIN personas per2 ON rg.idcobrador = per.idpersona
-		WHERE rg.mes = ".$mes." AND rg.anio = ".$anio." ORDER BY per.apellido, per.nombre; ";
+		WHERE rg.estado = 3 AND rg.mes = ".$mes." AND rg.anio = ".$anio." ORDER BY per.apellido, per.nombre; ";
 
 	  	$resultado = Doctrine_Manager::getInstance()->getCurrentConnection()->fetchAssoc($sql);
 
