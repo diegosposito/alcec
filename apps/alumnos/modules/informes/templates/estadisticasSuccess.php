@@ -1,5 +1,5 @@
 <br>
-<h1 align="center" style="color:black;">Estadísticas</h1>
+<h1 align="center" style="color:black;">Estadísticas - Recibos cobrados</h1>
 <br>
 <form action="<?php echo url_for('informes/estadisticas'); ?>" method="post" >
 <p align="center"><b>Período     : </b>
