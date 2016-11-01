@@ -22,7 +22,7 @@ $(document).ready(function(){
 <?php if (count($resultado) > 0){ ?>              
   <table cellspacing="0" class="stats">
       <tr>
-        <td colspan="4" width="100%"><b>Se van a generar <?php echo count($resultado); ?> recibos.</b></td>
+        <td colspan="4" width="100%"><b>Total de recibos: <?php echo count($resultado); ?></b></td>
       </tr>
       <tr>
         <?php if ($permite_seleccionar=='1'){ ?>
