@@ -279,7 +279,7 @@ Sede: '.$oSede.'
 		    $pdf->Cell($x,5,$socio['mesanio'],0,0,'L'); 
 		    $y+=5;
 		    $pdf->SetXY($x,$y); 
-		    $pdf->Cell($x,5,$socio['monto'].$Yimage,0,0,'L'); 
+		    $pdf->Cell($x,5,'$'.$socio['monto'],0,0,'L'); 
 
 		    $contador++;
 
