@@ -39,7 +39,7 @@ class PersonasTable extends Doctrine_Table
         FROM
         personas per JOIN meses_cobro mc ON per.idpersona = mc.idpersona
         LEFT JOIN recibos_generados rg ON per.idpersona = rg.idpersona AND mc.mes = rg.mes AND anio = rg.anio AND rg.estado <> 2
-        WHERE mc.mes = MONTH(NOW()) AND rg.id IS NULL;  ";
+        WHERE per.activo AND mc.mes = MONTH(NOW()) AND rg.id IS NULL;  ";
         
         $q = Doctrine_Manager::getInstance()->getCurrentConnection()->fetchAssoc($sql);
 
