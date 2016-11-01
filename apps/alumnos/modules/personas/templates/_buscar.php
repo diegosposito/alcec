@@ -25,7 +25,7 @@
     </tr>    
   </table>
 </form>
-
+<p>Ingrese al menos 3 caracteres para filtrar la búsqueda </p>
 <br>
 <?php if (count($resultado) > 0){ ?>		    	   	
 	<table cellspacing="0" class="stats">
