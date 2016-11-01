@@ -69,6 +69,33 @@ class Estadisticas extends sfDoctrineRecord
         return $resultado;		     
 	}
 
+	public function obtenerIngresosMensualesxAnio($anio) {
+
+		// Set the charset
+		Doctrine_Manager::getInstance()->setCharset('utf8');
+		Doctrine_Manager::getInstance()->setCollate('utf8_general_ci');
+
+		$sql = "SELECT COUNT(DISTINCT id) AS cantidad, SUM(monto) as monto, mes, anio, mesanio FROM recibos_generados WHERE estado = 3 GROUP BY mes, anio HAVING anio = '".$anio."' ";
+
+	  	$resultado = Doctrine_Manager::getInstance()->getCurrentConnection()->fetchAssoc($sql);
+
+        return $resultado;		     
+	}
+
+	public function obtenerIngresosDetallexAnioMes($anio, $mes) {
+
+		// Set the charset
+		Doctrine_Manager::getInstance()->setCharset('utf8');
+		Doctrine_Manager::getInstance()->setCollate('utf8_general_ci');
+
+		$sql = "SELECT per.apellido, per.nombre, CONCAT(per.apellido, ', ', per.nombre) as apellidonombre, rg.mesanio, rg.anio, rg.monto, CONCAT(per2.apellido, ', ', per2.nombre) as cobrador FROM recibos_generados rg JOIN personas per ON rg.idpersona = per.idpersona LEFT JOIN personas per2 ON rg.idcobrador = per.idpersona
+		WHERE rg.mes = ".$mes." AND rg.anio = ".$anio." ORDER BY per.apellido, per.nombre; ";
+
+	  	$resultado = Doctrine_Manager::getInstance()->getCurrentConnection()->fetchAssoc($sql);
+
+        return $resultado;		     
+	}
+
 	public function obtenerAspirantesPeriodoGroupFacultad($desde1, $hasta1, $desde2, $hasta2, $idsede, $idtipocarrera) {
 
 		// Set the charset
