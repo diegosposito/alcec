@@ -782,8 +782,13 @@ Sede: '.$oSede.'
         		$this->criterio = $arreglo['criterio'];
         		$this->titulo = $arreglo['titulo'];
         		$this->tipo = $arreglo['tipo'];
+
+        		if(strlen($this->criterio)>2)        	
+  				    $this->resultado = Doctrine_Core::getTable('Alumnos')->buscarPersonas($this->tipocriterio, $this->criterio, $this->idplanestudio, $this->getUser()->getProfile()->getIdsede(), $this->tipo);						
+			    else
+			    	$this->resultado =NULL;
         	
-  				$this->resultado = Doctrine_Core::getTable('Alumnos')->buscarPersonas($this->tipocriterio, $this->criterio, $this->idplanestudio, $this->getUser()->getProfile()->getIdsede(), $this->tipo);			
+  				
 			}
 		} else {
 			$this->resultado = array();
