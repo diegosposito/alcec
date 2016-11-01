@@ -346,7 +346,7 @@ class AlumnosTable extends Doctrine_Table
             $q = Doctrine_Manager::getInstance()->getCurrentConnection()->fetchAssoc("
                 SELECT pe.* FROM personas pe 
                 WHERE
-                        ((pe.apellido LIKE '%".$criterio."%') OR (pe.nombre LIKE '%".$criterio."%'))
+                        pe.apellido LIKE '%".$criterio."%' 
                         AND pe.socio 
                         ORDER BY pe.apellido ASC, pe.nombre ASC
             ");
