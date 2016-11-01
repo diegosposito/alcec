@@ -1942,7 +1942,22 @@ class informesActions extends sfActions
 	public function executePadronsocios()	{	
 	}
 
-	public function executeEstadisticas()	{	
+	public function executeEstadisticas(sfWebRequest $request)	{
+        
+        $oEstadistica = new Estadisticas();
+        $this->arrMeses = array(1=>'Enero',2=>'Febrero',3=>'Marzo',4=>'Abril',5=>'Mayo',6=>'Junio',7=>'Julio',8=>'Agosto',9=>'Setiembre',10=>'Octubre',11=>'Noviembre',12=>'Diciembre');
+
+		if ($request->isMethod('post')) {		
+            $this->anioseleccionado = $request->getParameter('idanio');
+            $this->meseleccionado = $request->getParameter('idmes');
+			// Obtener resumen de ingresos agrupados por mes para un año especifico
+			$this->resultadoss = $oEstadistica->obtenerIngresosMensualesxAnio($request->getParameter('idanio'));
+            
+            // Si selecciono un mes, se muestra la informacion detallada del mes/año
+			if ($request->getParameter('idmes')>0){
+                $this->detalless = $oEstadistica->obtenerIngresosDetallexAnioMes($request->getParameter('idanio'),$request->getParameter('idmes'));
+			}
+		}		 	
 	}
 
 	// Plan de estudios (PDF)
@@ -1994,7 +2009,7 @@ class informesActions extends sfActions
 		    $pdf->SetXY(130,$y); 
 		    $pdf->Cell(10,5,$socio['nrodoc'],0,0,'L'); 
 		    $pdf->SetXY(150,$y); 
-		    $pdf->Cell(10,5,$socio['fechaingreso'],0,0,'L'); 
+		    $pdf->Cell(10,5,date("d/m/Y", strtotime($socio['created_at'])),0,0,'L'); 
 		    
 		
  			$y = $y + 5;  
