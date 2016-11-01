@@ -115,7 +115,7 @@
 							    	            echo '<li>'.link_to('Usuarios', 'sf_guard_user').'</li>' ; 
 							    	        } 
 							    	    } ?>   
-								<?php echo '<li>'.link_to('Socios', 'personas/buscar').'</li>' ; ?>
+								<?php echo '<li>'.link_to('Socios', 'personas/new').'</li>' ; ?>
 								<?php echo '<li>'.link_to('Cobradores', 'personas/newcobrador').'</li>' ; ?>
 								<?php echo '<li>'.link_to('Nuevos Recibos', 'personas/generarrecibos').'</li>' ; ?>
 								<?php echo '<li>'.link_to('Imprimir Recibos', 'personas/gestionrecibosgenerados').'</li>' ; ?>
