@@ -2009,7 +2009,7 @@ class informesActions extends sfActions
 		    $pdf->SetXY(130,$y); 
 		    $pdf->Cell(10,5,$socio['nrodoc'],0,0,'L'); 
 		    $pdf->SetXY(150,$y); 
-		    $pdf->Cell(10,5,date("d/m/Y", strtotime($socio['created_at'])),0,0,'L'); 
+		    $pdf->Cell(10,5,date("d/m/Y", strtotime($socio['fechaingreso'])),0,0,'L'); 
 		    
 		
  			$y = $y + 5;  
