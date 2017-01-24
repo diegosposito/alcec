@@ -39,7 +39,7 @@ class PersonasTable extends Doctrine_Table
         FROM
         personas per JOIN meses_cobro mc ON per.idpersona = mc.idpersona
         LEFT JOIN recibos_generados rg ON per.idpersona = rg.idpersona AND mc.mes = rg.mes AND anio = rg.anio AND rg.estado <> 2
-        WHERE per.activo AND mc.mes = MONTH(NOW()) AND rg.id IS NULL ORDER BY per.apellido;  ";
+        WHERE per.socio AND per.activo AND mc.mes = MONTH(NOW()) AND rg.id IS NULL ORDER BY per.apellido;  ";
         
         $q = Doctrine_Manager::getInstance()->getCurrentConnection()->fetchAssoc($sql);
 
@@ -130,9 +130,13 @@ class PersonasTable extends Doctrine_Table
         $datos = substr($datos, 0, strlen($datos)-2);
 
         // actualizar designaciones
-        $sql = "INSERT INTO recibos_generados SELECT null, per.idpersona, per.idcobrador, MONTH(NOW()) as mes, YEAR(NOW()) as anio, CONCAT(m.descripcion,' de ',YEAR(NOW())) as detalle, per.monto, now(), now(),1,1,1 FROM personas per 
-               JOIN meses m ON m.mes = MONTH(NOW()) 
-               WHERE per.idpersona IN (".$datos.");";
+        $sql = "INSERT INTO recibos_generados SELECT null, per.idpersona, per.idcobrador, MONTH(NOW()) as mes, YEAR(NOW()) as anio, CONCAT(m.descripcion,' de ',YEAR(NOW())) as detalle, per.monto, now(), now(),1,1,1 
+        FROM
+            personas per 
+              JOIN meses m ON m.mes = MONTH(NOW()) 
+              JOIN meses_cobro mc ON per.idpersona = mc.idpersona
+              LEFT JOIN recibos_generados rg ON per.idpersona = rg.idpersona AND mc.mes = rg.mes AND anio = rg.anio AND rg.estado <> 2 
+            WHERE per.idpersona NOT IN (".$datos.") AND per.activo AND mc.mes = MONTH(NOW()) AND rg.id IS NULL;"; 
         
         $q = Doctrine_Manager::getInstance()->getCurrentConnection();
         
