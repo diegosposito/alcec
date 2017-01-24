@@ -22,7 +22,7 @@ $(document).ready(function(){
 </br>
 <h3 align="center">Generar recibos del mes actual </h3>
 <h4>Observaciones: </h4>
-<h5>Se pueden desmarcar registros que se considere no deberían generarse para este mes, por el motivo que corresponda. </h5>
+<h5>Se pueden marcar registros que se considere no deberían generarse para este mes, por el motivo que corresponda. </h5>
 
 <form action="<?php echo url_for('personas/grabarrecibosgenerados') ?>" method="post" id="formLista">
   <table cellspacing="0" class="stats" width="100%">
