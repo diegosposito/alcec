@@ -25,7 +25,7 @@ $(document).ready(function(){
 </br>
 <h3 align="center">Gestión de Recibos </h3>
 <h4>Observaciones: </h4>
-<h5>Se pueden desmarcar registros que se considere no deberían generarse para este mes, por el motivo que corresponda. </h5>
+<h5>Se pueden marcar registros que se considere no deberían imprimirse para este mes, por el motivo que corresponda. </h5>
 
 <form action="<?php echo url_for('personas/imprimirrecibosseleccionados') ?>" method="post" id="formLista">
   <table cellspacing="0" class="stats" width="100%">
