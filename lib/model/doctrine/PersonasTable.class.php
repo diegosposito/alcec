@@ -74,7 +74,7 @@ class PersonasTable extends Doctrine_Table
     }  
 
     // crear recibos de personas seleccionadas
-    public static function obtenerRecibosGeneradosPorIds($arrIdRecibosGenerados)
+    public static function obtenerRecibosGeneradosPorIds($idestado, $idcobrador=null, $fechadesde=null, $fechahasta=null, $arrIdRecibosGenerados)
     {
         
         // Definir elemenos para filtrar por IN
@@ -89,7 +89,20 @@ class PersonasTable extends Doctrine_Table
                 FROM recibos_generados rg 
                 JOIN personas per ON rg.idpersona = per.idpersona
                 LEFT JOIN personas per2 ON rg.idcobrador = per2.idpersona
-                WHERE rg.id IN (".$datos.") ORDER BY per.apellido;";
+                WHERE rg.id NOT IN (".$datos.") AND rg.estado = ".$idestado." ";
+
+        if ($idcobrador <> NULL){
+          $sql .=  " AND rg.idcobrador = ".$idcobrador." ";  
+        }
+        if ($fechadesde <> NULL){
+          $sql .=  " AND DATE(rg.created_at) >= DATE('".$fechadesde."') ";  
+        }
+        if ($fechahasta <> NULL){
+          $sql .=  " AND DATE(rg.created_at) <= DATE('".$fechahasta."') ";  
+        }
+
+        $sql .=  " ORDER BY per.apellido; ";  
+        echo $sql;exit;
 
         $q = Doctrine_Manager::getInstance()->getCurrentConnection()->fetchAssoc($sql);
 
