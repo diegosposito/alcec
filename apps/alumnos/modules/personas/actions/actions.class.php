@@ -670,11 +670,18 @@ Sede: '.$oSede.'
 	                $arr_idrecibosgenerados[] = $seleccionados;
 	        }
 
-	        // Si existen para generar recibos
-	        if ( count($arr_idrecibosgenerados)>0 ){
-	                $resultado = Doctrine_Core::getTable('Personas')->actualizarRecibosACobradosPorIds($arr_idrecibosgenerados);
-	        }
+	        if($request->getParameter('inicio')){
+		    	$fechaa = explode("/", $request->getParameter('inicio'));
+		        $fechadesde = $fechaa[2]."-".$fechaa[1]."-".$fechaa[0]; 
+		    }
+    
+		    if($request->getParameter('fin')){
+		    	 $fechab = explode("/", $request->getParameter('fin'));
+		         $fechahasta = $fechab[2]."-".$fechab[1]."-".$fechab[0]; 
+		    }
 
+            $resultado = Doctrine_Core::getTable('Personas')->actualizarRecibosACobradosPorIds($request->getParameter('seleccionar'), $request->getParameter('seleccionar2'),$fechadesde, $fechahasta, $arr_idrecibosgenerados);
+	       
 	    } //endif
 	     
 	}
