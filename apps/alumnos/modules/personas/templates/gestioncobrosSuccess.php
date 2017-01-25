@@ -25,7 +25,7 @@ $(document).ready(function(){
 </br>
 <h3 align="center">Gestión de Cobros </h3>
 <h4>Observaciones: </h4>
-<h5>Debe seleccionar aquellos registros que fueron cobrados efectivamente, dejando sin marcar los que no se pudieron cobrar. </h5>
+<h5>Debe marcar los registros que no pudieron cobrarse, dejando sin marcar los que pudieron cobrarse. </h5>
 
 <form action="<?php echo url_for('personas/gestioncobros') ?>" method="post" id="formLista">
   <table cellspacing="0" class="stats" width="100%">
