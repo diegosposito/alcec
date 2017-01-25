@@ -115,25 +115,42 @@ class PersonasTable extends Doctrine_Table
     } 
 
     // crear recibos de personas seleccionadas
-    public static function actualizarRecibosACobradosPorIds($arrIdRecibosGenerados)
+    public static function actualizarRecibosACobradosPorIds($idestado, $idcobrador=null, $fechadesde=null, $fechahasta=null, $arrIdRecibosGenerados)
     {
         
         // Definir elemenos para filtrar por IN
         $datos=''; $cantidad=0;
-        foreach($arrIdRecibosGenerados as $info)
-            $datos .= $info.', ';
+
+        if ( count($arrIdRecibosGenerados)>0 ){
+            foreach($arrIdRecibosGenerados as $info)
+                $datos .= $info.', ';
         
-        $datos = substr($datos, 0, strlen($datos)-2);
+            $datos = substr($datos, 0, strlen($datos)-2);
 
-        $sql ="UPDATE recibos_generados rg 
-                SET rg.estado = 3 
-                WHERE rg.id IN (".$datos.") ;";
+         }   
 
-        $q = Doctrine_Manager::getInstance()->getCurrentConnection();
+        $sql ="UPDATE recibos_generados rg set rg.estado = 3 
+               WHERE rg.estado = ".$idestado." ";
+
+        if ($idcobrador <> NULL){
+          $sql .=  " AND rg.idcobrador = ".$idcobrador." ";  
+        }
+        if ($fechadesde <> NULL){
+          $sql .=  " AND DATE(rg.created_at) >= DATE('".$fechadesde."') ";  
+        }
+        if ($fechahasta <> NULL){
+          $sql .=  " AND DATE(rg.created_at) <= DATE('".$fechahasta."') ";  
+        }
+        if ($datos <> ''){
+          $sql .=  " AND rg.id NOT IN (".$datos.") ";  
+        }
+        $sql .=  ";";
+
+        $q = Doctrine_Manager::getInstance()->getCurrentConnection();        
         
         return $q->execute($sql);
-    
-    }   
+    }  
+       
 
     // crear recibos de personas seleccionadas
     public static function crearRecibos($arrPersonas)
