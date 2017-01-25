@@ -203,17 +203,12 @@ Sede: '.$oSede.'
                 $arr_personas[] = $seleccionados;
         }
 
-            // Si existen para generar recibos
-            if ( count($arr_personas)>0 ){
-                $resultado = Doctrine_Core::getTable('Personas')->crearRecibos($arr_personas);
-                $estado = 'Los recibos fueron generados para los socios seleccionados.';
-                $this->redirect($this->generateUrl('default', array('module' => 'personas',
-                'action' => 'generarrecibos', 'msgSuccess' => $estado )));
-            } else {
-               $estado='No hay socios seleccionados para generar recibos';
-               $this->redirect($this->generateUrl('default', array('module' => 'personas',
-                'action' => 'generarrecibos', 'msgError' => $estado )));
-            }
+        // Si existen para generar recibos
+        $resultado = Doctrine_Core::getTable('Personas')->crearRecibos($arr_personas);
+        $estado = 'Los recibos fueron generados para los socios seleccionados.';
+        $this->redirect($this->generateUrl('default', array('module' => 'personas',
+              'action' => 'generarrecibos', 'msgSuccess' => $estado )));
+          
 
    }
 
@@ -231,33 +226,25 @@ Sede: '.$oSede.'
                 $arr_idrecibosgenerados[] = $seleccionados;
         }
 
-        // Si existen para generar recibos
-         if ( count($arr_idrecibosgenerados)>0 ){
-
-                if($request->getParameter('inicio')){
+       
+        if($request->getParameter('inicio')){
 			    	$fechaa = explode("/", $request->getParameter('inicio'));
 			        $fechadesde = $fechaa[2]."-".$fechaa[1]."-".$fechaa[0]; 
-			    }
+		}
     
-			    if($request->getParameter('fin')){
+		if($request->getParameter('fin')){
 			    	 $fechab = explode("/", $request->getParameter('fin'));
 			         $fechahasta = $fechab[2]."-".$fechab[1]."-".$fechab[0]; 
-			    }
+		}
    
-                $resultado = Doctrine_Core::getTable('Personas')->obtenerRecibosGeneradosPorIds($request->getParameter('seleccionar'), $request->getParameter('seleccionar2'),$fechadesde, $fechahasta,$arr_idrecibosgenerados);
+        $resultado = Doctrine_Core::getTable('Personas')->obtenerRecibosGeneradosPorIds($request->getParameter('seleccionar'), $request->getParameter('seleccionar2'),$fechadesde, $fechahasta,$arr_idrecibosgenerados);
 
-               // $resultado = Doctrine_Core::getTable('Personas')->obtenerRecibosGeneradosPorIds($arr_idrecibosgenerados);
-        } else {
-               $estado='No hay recibos generados seleccionados';
-               $this->redirect($this->generateUrl('default', array('module' => 'personas',
-                'action' => 'generarrecibos', 'msgError' => $estado )));
-        }
-
+       
         // COMIENZA LA IMPRESION DE RECIBOS
 
 		$pdf = new PDF();
 
-		$pdf->SetFont("Times", "", 9);
+		$pdf->SetFont("Times", "B", 12);
 		$pdf->setPrintHeader(false);
 		$pdf->setPrintFooter(false); 
  
