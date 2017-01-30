@@ -330,7 +330,7 @@ class PersonasTable extends Doctrine_Table
     {   
             
             if($idcobrador !==NULL){
-                $criterioa = " AND p.idcobrador = "$idcobrador." ";
+                $criterioa = " AND p.idcobrador = ".$idcobrador." ";
             } else {
                 $criterioa = "";
             }
