@@ -20,6 +20,7 @@
       </tr>
     </tfoot>
     <tbody>
+    <input type="hidden" name="idcobrador" value="<?php echo $idcobrador; ?>">
     <?php if ($mensaje) {?>
       <tr>
         <td colspan="2">
