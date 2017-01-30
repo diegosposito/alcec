@@ -1,8 +1,33 @@
 <br>
 <h1 align="center" style="color:black;">Padron de Socios</h1>
+<br>
 
- <a target="_blank" href="<?php echo url_for('informes/padronsocios') ?>"><img src='<?php echo $sf_request->getRelativeUrlRoot();?>/images/printer.png' align='center' size='20' /></a>
+
+<a target="_blank" href="<?php echo url_for('informes/padronsocios?idcobrador='.$idcobrador) ?>"><img src='<?php echo $sf_request->getRelativeUrlRoot();?>/images/printer.png' align='center' size='20' /></a>
+
+<form action="<?php echo url_for('informes/socios') ?>" method="post" id="formLista">
 <table cellspacing="0" class="stats">
+ <tr>
+    <td colspan="2" width="10%"><b>Seleccionar Cobrador:</b></td>
+    <td>
+    <?php
+       echo "<select id='seleccionar2' name='seleccionar2' >";
+       echo "<option SELECTED value=''>-----SELECCIONAR-----</option>";
+       foreach ($cobradores as $cobrador){
+          echo "<option value=".$cobrador["idpersona"].">".$cobrador["nombrecompleto"]."</option>";
+       }
+       echo "</select>";
+     ?>
+    </td>
+  </tr> 
+   <tr>
+        <td colspan="2" align="center">
+          <input type="submit" value="Mostrar Socios" id="botonimprimir" />
+        </td>
+        <td colspan="2" align="center">
+          <p><?php echo ($idcobrador>0) ? $oCobrador->getApellido().", ".$oCobrador->getNombre() : '' ?></p>
+        </td>
+  </tr>
      <tr>
                   <td width="30%" align="center" class="hed">Nombre</td>
                   <td width="20%" align="center" class="hed">Dirección</td>
@@ -27,4 +52,6 @@
       <br>
   
     </tbody>
+    
   </table>
+  </form>
