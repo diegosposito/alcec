@@ -326,10 +326,10 @@ class PersonasTable extends Doctrine_Table
     }   
 
     // Busca todas los alumnos segun los criterios
-    public static function obtenerSocios($idcobrador=NULL)
+    public static function obtenerSocios($idcobrador='')
     {   
             
-            if($idcobrador !==NULL){
+            if($idcobrador <>''){
                 $criterioa = " AND p.idcobrador = ".$idcobrador." ";
             } else {
                 $criterioa = "";
