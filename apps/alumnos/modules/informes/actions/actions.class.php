@@ -1982,18 +1982,19 @@ class informesActions extends sfActions
 	// Plan de estudios (PDF)
 	public function executePadronsociospdf(sfWebRequest $request)	{	
 
-		$idcobrador = $request->getParameter('idcobrador');
-		$cobrador = '';
-		
+		$idcobrador = $request->getParameter('idcobrador'); $cobrador ='';
+
 		if ($idcobrador>0){
 		    $oSocios = Doctrine_Core::getTable('Personas')->obtenerSocios($idcobrador);
-		    $cobrador = $oSocios->getApellido().', '.$oSocios->getNombre();
+
+		    $oCobrador= Doctrine_Core::getTable('Personas')->find($idcobrador);
+
+		    $cobrador = $oCobrador->getApellido().', '.$oCobrador->getNombre();
 		}
 		else {
 			$oSocios = Doctrine_Core::getTable('Personas')->obtenerSocios();
 		}
-
-
+  
 		// pdf object
 		$pdf = new PDF();
 
