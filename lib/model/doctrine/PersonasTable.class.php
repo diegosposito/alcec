@@ -319,20 +319,26 @@ class PersonasTable extends Doctrine_Table
             $q = Doctrine_Manager::getInstance()->getCurrentConnection()->fetchAssoc("
                 SELECT p.idpersona, p.apellido, p.nombre, concat(p.apellido, ', ', p.nombre) as nombrecompleto, nrodoc
                 FROM personas p 
-                WHERE NOT p.socio "
+                WHERE p.activo AND NOT p.socio ORDER BY p.apellido, p.nombre "
             );
        
             return $q;
     }   
 
     // Busca todas los alumnos segun los criterios
-    public static function obtenerSocios()
+    public static function obtenerSocios($idcobrador=NULL)
     {   
-       
+            
+            if($idcobrador !==NULL){
+                $criterioa = " AND p.idcobrador = "$idcobrador." ";
+            } else {
+                $criterioa = "";
+            }
+
             $q = Doctrine_Manager::getInstance()->getCurrentConnection()->fetchAssoc("
                 SELECT p.idpersona, p.apellido, p.nombre, p.created_at, concat(p.apellido, ', ', p.nombre) as nombrecompleto, p.nrodoc, p.fechaingreso, IFNULL(concat(p2.apellido, ', ', p2.nombre),'') as cobrador
                 FROM personas p LEFT JOIN personas p2 ON p.idcobrador = p2.idpersona
-                WHERE p.socio AND p.activo ORDER BY p.apellido, p.nombre  "
+                WHERE p.socio ".$criterioa." AND p.activo ORDER BY p.apellido, p.nombre  "
             );
        
             return $q;
