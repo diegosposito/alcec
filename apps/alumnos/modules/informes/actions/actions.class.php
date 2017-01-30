@@ -28,11 +28,27 @@ class informesActions extends sfActions
 
 	public function executeSocios(sfWebRequest $request)
 	{
-	    $this->profesionaless = Doctrine_Core::getTable('Personas')
-	      ->createQuery('a')
-	      ->where('a.socio=true AND a.activo=true')
-	      ->orderBy('a.apellido')
-	      ->execute();
+	    $this->profesionaless ='';
+ 
+	    $idcobrador = ($request->getParameter('seleccionar2')>0) ? $request->getParameter('seleccionar2') : 0;
+		
+        if($idcobrador>0){
+            $this->oCobrador= Doctrine_Core::getTable('Personas')->find($idcobrador);
+		} 
+
+	    if ($request->isMethod('post')) {	
+		    $this->profesionaless = Doctrine_Core::getTable('Personas')
+		      ->createQuery('a')
+		      ->where('a.socio=true AND a.activo=true')
+		      ->andWhere('a.idcobrador = ?', $idcobrador)
+		      ->orderBy('a.apellido')
+		      ->execute();
+	    }  
+
+	    $this->cobradores = Doctrine_Core::getTable('Personas')->obtenerCobradores();
+
+	    $this->idcobrador = $idcobrador;
+
 	}
 	
 	public function executeBuscarciclolectivoacad(sfWebRequest $request)	
@@ -1939,7 +1955,10 @@ class informesActions extends sfActions
 	  	}	
 	}	
 
-	public function executePadronsocios()	{	
+	public function executePadronsocios(sfWebRequest $request)	{
+		 $this->idcobrador = ($request->getParameter('idcobrador')>0) ? $request->getParameter('idcobrador') : 0;
+		
+       
 	}
 
 	public function executeEstadisticas(sfWebRequest $request)	{
@@ -1962,8 +1981,18 @@ class informesActions extends sfActions
 
 	// Plan de estudios (PDF)
 	public function executePadronsociospdf(sfWebRequest $request)	{	
+
+		$idcobrador = $request->getParameter('idcobrador');
+		$cobrador = '';
 		
-		$oSocios = Doctrine_Core::getTable('Personas')->obtenerSocios();
+		if ($idcobrador>0){
+		    $oSocios = Doctrine_Core::getTable('Personas')->obtenerSocios($idcobrador);
+		    $cobrador = $oSocios->getApellido().', '.$oSocios->getNombre();
+		}
+		else {
+			$oSocios = Doctrine_Core::getTable('Personas')->obtenerSocios();
+		}
+
 
 		// pdf object
 		$pdf = new PDF();
@@ -1980,7 +2009,7 @@ class informesActions extends sfActions
 		$encabezado = '
 			<div style="text-align: center; font-family: Times New Roman,Times,serif;"><span
 			style="font-size: 12;"><img src="'.$request->getRelativeUrlRoot().'/images/header.png" height="80px" width="550px">
-			Padron Socios: '.$current_date.'</div>';        
+			Padron Socios: '.$current_date.'&nbsp;&nbsp;'.$cobrador.'</div>';        
 
 		$pdf->writeHTML($encabezado, true, false, true, false, '');   
 		
