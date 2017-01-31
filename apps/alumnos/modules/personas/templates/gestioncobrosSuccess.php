@@ -2,13 +2,13 @@
 
 $(document).ready(function(){
     
-    $("#inicio").mask("99/99/9999");
-    $("#fin").mask("99/99/9999");
+   // $("#inicio").mask("99/99/9999");
+   // $("#fin").mask("99/99/9999");
     
     $('#botonlista').click(function() {
     // guardar la informacion de documentacion adicional del alumnos ingresada
         $.post("<?php echo url_for('personas/obtenerrecibosporestado'); ?>",
-          { seleccionar: $("#seleccionar").val(), seleccionar2: $("#seleccionar2").val(), inicio: $("#inicio").val(), fin: $("#fin").val()},
+          { seleccionar: $("#seleccionar").val(), seleccionar2: $("#seleccionar2").val(), idmes: $("#idmes").val(), idanio: $("#idanio").val()},
         function(data){
             $('#idresultados').html(data);
         }
@@ -58,13 +58,26 @@ $(document).ready(function(){
   </tr> 
 
   <tr>
-  <td colspan="2" width="10%"><b>Fecha Desde:</b></td>
-  <td><input type="text" name="inicio" id="inicio"></td>
-</tr>
-<tr>
-  <td colspan="2" width="10%"><b>Fecha Hasta:</b></td>
-  <td><input type="text" name="fin" id="fin"></td>
-</tr>
+      <td colspan="2" width="10%"><b>Mes:</b></td>
+      <td>
+      <select id="idmes" name="idmes">
+      <?php for ($mes = 1; $mes <= 12; $mes++) { ?>
+        <option value="<?php echo $mes ?>" <?php if ($mes == $messeleccionado) { ?>selected<?php } ?>><?php echo $mes ?></option>
+      <?php } ?>
+      </select>        
+      </td>
+      </tr> 
+     
+      <tr>
+      <td colspan="2" width="10%"><b>Año:</b></td>
+      <td>
+      <select id="idanio" name="idanio">
+      <?php for ($anio = date("Y")-1; $anio < date("Y")+2; $anio=$anio+1) { ?>
+        <option value="<?php echo $anio ?>" <?php if ($anio == $anioseleccionado) { ?>selected<?php } ?>><?php echo $anio ?></option>
+      <?php } ?>
+      </select>        
+      </td>
+  </tr> 
     
     <tfoot>
       <tr>
