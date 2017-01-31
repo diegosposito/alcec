@@ -229,6 +229,36 @@ class PersonasTable extends Doctrine_Table
         return $q->execute($sql);
     }  
 
+    // crear recibos de personas seleccionadas
+    public static function updPreciosSocios($arrPersonas, $precio)
+    {
+         
+          
+
+        // Definir elemenos para filtrar por IN
+        $datos=''; $cantidad=0;
+        if ( count($arrPersonas)>0 ){
+          
+            foreach($arrPersonas as $info)
+                $datos .= $info.', ';
+        
+            $datos = substr($datos, 0, strlen($datos)-2);
+
+        }   
+
+        // actualizar designaciones
+        $sql = "UPDATE personas per 
+                SET per.monto = ".$precio." 
+            WHERE per.socio AND per.monto = ".$precio." "; 
+
+        if ($datos<>'')    
+            $sql .= " AND per.idpersona NOT IN (".$datos.") ";
+
+        $q = Doctrine_Manager::getInstance()->getCurrentConnection();
+        
+        return $q->execute($sql);
+    } 
+
     // Obtiene todas las carreras asociadas a una persona
 	public static function obtenerCarrerasPersona($nrodoc)
 	{
