@@ -50,7 +50,7 @@ $(document).ready(function(){
           <input type="button" value="Mostrar recibos a generar" name="botonlista" id="botonlista" />
         </td>
         <td colspan="2" align="center">
-          <input type="submit" value="Generar recibos seleccionados" id="botonasignar" />
+          <input type="submit" value="Generar recibos" id="botonasignar" />
         </td>
       </tr>
     </tfoot>
