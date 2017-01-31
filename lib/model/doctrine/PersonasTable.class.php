@@ -230,7 +230,7 @@ class PersonasTable extends Doctrine_Table
     }  
 
     // crear recibos de personas seleccionadas
-    public static function updPreciosSocios($arrPersonas, $precio)
+    public static function updPreciosSocios($arrPersonas, $precio, $nuevoprecio)
     {
          
           
@@ -248,12 +248,13 @@ class PersonasTable extends Doctrine_Table
 
         // actualizar designaciones
         $sql = "UPDATE personas per 
-                SET per.monto = ".$precio." 
+                SET per.monto = ".$nuevoprecio." 
             WHERE per.socio AND per.monto = ".$precio." "; 
 
         if ($datos<>'')    
             $sql .= " AND per.idpersona NOT IN (".$datos.") ";
 
+        
         $q = Doctrine_Manager::getInstance()->getCurrentConnection();
         
         return $q->execute($sql);
