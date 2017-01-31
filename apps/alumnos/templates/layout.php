@@ -120,6 +120,7 @@
 								<?php echo '<li>'.link_to('Nuevos Recibos', 'personas/generarrecibos').'</li>' ; ?>
 								<?php echo '<li>'.link_to('Imprimir Recibos', 'personas/gestionrecibosgenerados').'</li>' ; ?>
 								<?php echo '<li>'.link_to('Gestión Cobros', 'personas/gestioncobros').'</li>' ; ?>
+								<?php echo '<li>'.link_to('Gestión Precios', 'personas/actualizarprecios').'</li>' ; ?>
 								<?php echo '<li>'.link_to('Salir', 'sf_guard_signout').'</li>' ; ?>
 							</ul>
 						</div>
