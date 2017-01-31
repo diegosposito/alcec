@@ -60,9 +60,10 @@ class PersonasForm extends BasePersonasForm
       $this->setValidators(array(
         'apellido' => new sfValidatorString(array('required' => true), array('required' => 'El apellido es obligatorio.')),
         'nombre' => new sfValidatorString(array('required' => true), array('required' => 'El nombre es obligatorio.')),
-        'numerodoc' => new sfValidatorString(array('required' => true), array('required' => 'El documento es obligatorio.')),
+        'numerodoc' => new sfValidatorString(array('required' => false), array('required' => 'El documento es obligatorio.')),
         'celular' => new sfValidatorString(array('max_length' => 200, 'required' => false)),
-        'direccion' => new sfValidatorString(array('max_length' => 200, 'required' => false)),
+        'direccion' => new sfValidatorString(array('max_length' => 200, 'required' => true)),
+        'direccion' => new sfValidatorString(array('required' => true), array('required' => 'La dirección es obligatoria.')),
         'ciudad' => new sfValidatorString(array('max_length' => 200, 'required' => false)),
         'email' => new sfValidatorString(array('max_length' => 200, 'required' => false)),
         'telefono' => new sfValidatorString(array('max_length' => 200, 'required' => false)),
