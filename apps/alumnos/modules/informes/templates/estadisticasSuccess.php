@@ -30,7 +30,7 @@
                   <td width="20%" align="center" class="hed">Año</td>
                   <td width="10%" align="center" class="hed">Cant. Recibos</td>
                   <td width="10%" align="center" class="hed">Monto Total</td>
-                  <td width="10%" align="center" class="hed">Detalle</td>
+                 
       </tr>
     <?php foreach ($resultadoss as $data): ?>
     <tr>
