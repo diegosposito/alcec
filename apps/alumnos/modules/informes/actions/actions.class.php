@@ -37,12 +37,12 @@ class informesActions extends sfActions
 		} 
 
 	    if ($request->isMethod('post')) {	
-		    $this->profesionaless = Doctrine_Core::getTable('Personas')
-		      ->createQuery('a')
-		      ->where('a.socio=true AND a.activo=true')
-		      ->andWhere('a.idcobrador = ?', $idcobrador)
-		      ->orderBy('a.apellido')
-		      ->execute();
+	    	
+	    	if ($idcobrador>0)
+			    $this->profesionaless = Doctrine_Core::getTable('Personas')->obtenerPadronSocios($idcobrador);
+			 else
+			 	$this->profesionaless = Doctrine_Core::getTable('Personas')->obtenerPadronSocios();
+			        
 	    }  
 
 	    $this->cobradores = Doctrine_Core::getTable('Personas')->obtenerCobradores();
@@ -1985,14 +1985,14 @@ class informesActions extends sfActions
 		$idcobrador = $request->getParameter('idcobrador'); $cobrador ='';
 
 		if ($idcobrador>0){
-		    $oSocios = Doctrine_Core::getTable('Personas')->obtenerSocios($idcobrador);
+		    $oSocios = Doctrine_Core::getTable('Personas')->obtenerPadronSocios($idcobrador);
 
 		    $oCobrador= Doctrine_Core::getTable('Personas')->find($idcobrador);
 
 		    $cobrador = $oCobrador->getApellido().', '.$oCobrador->getNombre();
 		}
 		else {
-			$oSocios = Doctrine_Core::getTable('Personas')->obtenerSocios();
+			$oSocios = Doctrine_Core::getTable('Personas')->obtenerPadronSocios();
 		}
   
 		// pdf object
@@ -2020,9 +2020,9 @@ class informesActions extends sfActions
 		$pdf->SetXY(20,$y);
 		$pdf->Cell(80,5,'Nombre',0,0,'C');    
 		$pdf->SetXY(20,$y);
-		$pdf->Cell(235,5,'Nro Doc',0,0,'C'); 
+		$pdf->Cell(235,5,'Monto',0,0,'C'); 
 		$pdf->SetXY(20,$y);
-		$pdf->Cell(280,5,'Fecha Ing.',0,0,'C'); 
+		$pdf->Cell(280,5,'Forma Pago',0,0,'C'); 
 		$pdf->SetXY(20,$y);
 		$y = $y + 5;		
 		$contador = 1;
@@ -2035,11 +2035,11 @@ class informesActions extends sfActions
             $pdf->SetXY(10,$y);
 		    $pdf->Cell(10,5,$socio['idpersona'],0,0,'L');
 		    $pdf->SetXY(20,$y);        
-		    $pdf->Cell(80,5,$socio['nombrecompleto'],0,0,'L');        
+		    $pdf->Cell(80,5,$socio['apellido'].', '.$socio['nombre'],0,0,'L');        
 		    $pdf->SetXY(130,$y); 
-		    $pdf->Cell(10,5,$socio['nrodoc'],0,0,'L'); 
+		    $pdf->Cell(10,5,$socio['monto'],0,0,'L'); 
 		    $pdf->SetXY(150,$y); 
-		    $pdf->Cell(10,5,date("d/m/Y", strtotime($socio['fechaingreso'])),0,0,'L'); 
+		    $pdf->Cell(10,5,$socio['tipopago'],0,0,'L'); 
 		    
 		
  			$y = $y + 5;  
