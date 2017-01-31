@@ -188,6 +188,19 @@ Sede: '.$oSede.'
 	    $this->idsede = $idsede;
     }
 
+    public function executeActualizarprecios(sfWebRequest $request)
+    {
+	  
+        $this->msgSuccess = $request->getParameter('msgSuccess', '');
+	    $this->msgError = $request->getParameter('msgError', '');
+
+	    $this->precioseleccionado = trim($request->getParameter('idprecio', ''));
+	  
+	    $this->precios = Doctrine_Core::getTable('Personas')->obtenerPreciosdiferentes();
+	   
+	   
+    }
+
     public function executeGestionrecibosgenerados(sfWebRequest $request)
     {
 	    $this->msgSuccess = $request->getParameter('msgSuccess', '');
@@ -464,6 +477,19 @@ Sede: '.$oSede.'
       $this->msgError = $request->getParameter('msgError', '');
       
       $this->resultado = Doctrine_Core::getTable('Personas')->obtenerRecibosAGenerar($request->getParameter('idmes'),$request->getParameter('idanio'));
+  
+      $this->permite_seleccionar = $request->getParameter('permite_seleccionar');
+
+  }
+
+     public function executeObtenersociosporprecio(sfWebRequest $request)
+  {
+      
+
+      $this->msgSuccess = $request->getParameter('msgSuccess', '');
+      $this->msgError = $request->getParameter('msgError', '');
+      
+      $this->resultado = Doctrine_Core::getTable('Personas')->obtenerSociosporprecio($request->getParameter('idprecio'));
   
       $this->permite_seleccionar = $request->getParameter('permite_seleccionar');
 
