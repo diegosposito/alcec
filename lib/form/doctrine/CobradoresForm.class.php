@@ -52,7 +52,6 @@ class CobradoresForm extends BasePersonasForm
       $this->setValidators(array(
         'apellido' => new sfValidatorString(array('required' => true), array('required' => 'El apellido es obligatorio.')),
         'nombre' => new sfValidatorString(array('required' => true), array('required' => 'El nombre es obligatorio.')),
-        'numerodoc' => new sfValidatorString(array('required' => true), array('required' => 'El documento es obligatorio.')),
         ));
 
       $this->validatorSchema->setOption('allow_extra_fields',true); 
