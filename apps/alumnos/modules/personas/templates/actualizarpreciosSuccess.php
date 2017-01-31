@@ -24,7 +24,7 @@ $(document).ready(function(){
 <h4>IMPORTANTE: </h4>
 <h5>Lo ideal es utilizar este módulo actualizando primero el mayor precio y asi sucesivamente hasta el menor precio, para evitar mezclar grupos. </h5>
 
-<form action="<?php echo url_for('personas/grabarrecibosgenerados') ?>" method="post" id="formLista">
+<form action="<?php echo url_for('personas/actualizarpreciossocios') ?>" method="post" id="formLista">
   <table cellspacing="0" class="stats" width="100%">
     <tfoot>
       <tr>
