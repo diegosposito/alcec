@@ -51,6 +51,19 @@ class PersonasTable extends Doctrine_Table
         return $q;
     } 
 
+    // Obtener designaciones por persona, filtrando tambien por area y sede
+    public static function obtenerSociosporprecio($precio)
+    {
+        $sql ="SELECT per.idpersona, per.nombre, per.apellido, per.monto
+        FROM
+        personas per 
+        WHERE per.socio AND per.monto = ".$precio." ORDER BY per.apellido;  ";
+        
+        $q = Doctrine_Manager::getInstance()->getCurrentConnection()->fetchAssoc($sql);
+
+        return $q;
+    } 
+
     // Obtener recibos por estado
     public static function obtenerRecibosPorEstado($idestado, $idcobrador=null, $idmes=null, $idanio=null)
     {
@@ -353,7 +366,20 @@ class PersonasTable extends Doctrine_Table
             );
        
             return $q;
-    }   
+    }  
+
+    // Busca todas los precios distintos
+    public static function obtenerPreciosdiferentes()
+    {   
+       
+            $q = Doctrine_Manager::getInstance()->getCurrentConnection()->fetchAssoc("
+                SELECT DISTINCT p.monto as monto
+                FROM personas p 
+                WHERE p.activo AND p.socio ORDER BY p.monto "
+            );
+       
+            return $q;
+    }    
 
     // Busca todas los alumnos segun los criterios
     public static function obtenerSocios($idcobrador='')
