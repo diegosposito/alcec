@@ -161,6 +161,17 @@ Sede: '.$oSede.'
 	  
         $this->msgSuccess = $request->getParameter('msgSuccess', '');
 	    $this->msgError = $request->getParameter('msgError', '');
+
+	    $this->anioseleccionado = trim($request->getParameter('idanio', ''));
+	    $this->messeleccionado = trim($request->getParameter('idmes', ''));
+
+	    if($this->anioseleccionado=='')
+	    	 $this->anioseleccionado = date("Y");
+
+	    if($this->messeleccionado=='')
+	    	 $this->messeleccionado = date("m");
+
+	   
 	     
 	    // solo usuarios de sede central pueden asignar resoluciones
 	    if(sfContext::getInstance()->getUser()->getAttribute('id_sede','')<>'1'){
@@ -182,6 +193,15 @@ Sede: '.$oSede.'
 	    $this->msgSuccess = $request->getParameter('msgSuccess', '');
 	    $this->msgError = $request->getParameter('msgError', '');
 
+	    $this->anioseleccionado = trim($request->getParameter('idanio', ''));
+	    $this->messeleccionado = trim($request->getParameter('idmes', ''));
+
+	    if($this->anioseleccionado=='')
+	    	 $this->anioseleccionado = date("Y");
+
+	    if($this->messeleccionado=='')
+	    	 $this->messeleccionado = date("m");
+
 	    $this->cobradores = Doctrine_Core::getTable('Personas')->obtenerCobradores();
 
 	    $this->estados = array(1=>'Generados',2=>'Cancelados',3=>'Cobrados');	 
@@ -194,7 +214,8 @@ Sede: '.$oSede.'
         $this->msgError = $request->getParameter('msgError', '');
 
         $arr_personas = array();
-           
+
+
         // Obtiene designaciones seleccionadas en la vista en un array
         $idcase = $request->getParameter('idcase', '');
 
@@ -204,7 +225,7 @@ Sede: '.$oSede.'
         }
 
         // Si existen para generar recibos
-        $resultado = Doctrine_Core::getTable('Personas')->crearRecibos($arr_personas);
+        $resultado = Doctrine_Core::getTable('Personas')->crearRecibos($arr_personas, $request->getParameter('idmes', ''), $request->getParameter('idanio', ''));
         $estado = 'Los recibos fueron generados para los socios seleccionados.';
         $this->redirect($this->generateUrl('default', array('module' => 'personas',
               'action' => 'generarrecibos', 'msgSuccess' => $estado )));
@@ -227,7 +248,7 @@ Sede: '.$oSede.'
         }
 
        
-        if($request->getParameter('inicio')){
+        /*if($request->getParameter('inicio')){
 			    	$fechaa = explode("/", $request->getParameter('inicio'));
 			        $fechadesde = $fechaa[2]."-".$fechaa[1]."-".$fechaa[0]; 
 		}
@@ -235,9 +256,9 @@ Sede: '.$oSede.'
 		if($request->getParameter('fin')){
 			    	 $fechab = explode("/", $request->getParameter('fin'));
 			         $fechahasta = $fechab[2]."-".$fechab[1]."-".$fechab[0]; 
-		}
+		}*/
    
-        $resultado = Doctrine_Core::getTable('Personas')->obtenerRecibosGeneradosPorIds($request->getParameter('seleccionar'), $request->getParameter('seleccionar2'),$fechadesde, $fechahasta,$arr_idrecibosgenerados);
+        $resultado = Doctrine_Core::getTable('Personas')->obtenerRecibosGeneradosPorIds($request->getParameter('seleccionar'), $request->getParameter('seleccionar2'),$request->getParameter('idmes'), $request->getParameter('idanio'),$arr_idrecibosgenerados);
 
        
         // COMIENZA LA IMPRESION DE RECIBOS
@@ -442,7 +463,7 @@ Sede: '.$oSede.'
       $this->msgSuccess = $request->getParameter('msgSuccess', '');
       $this->msgError = $request->getParameter('msgError', '');
       
-      $this->resultado = Doctrine_Core::getTable('Personas')->obtenerRecibosAGenerar();
+      $this->resultado = Doctrine_Core::getTable('Personas')->obtenerRecibosAGenerar($request->getParameter('idmes'),$request->getParameter('idanio'));
   
       $this->permite_seleccionar = $request->getParameter('permite_seleccionar');
 
@@ -451,7 +472,7 @@ Sede: '.$oSede.'
    public function executeObtenerrecibosporestado(sfWebRequest $request)
   {
     
-    if($request->getParameter('inicio')){
+   /* if($request->getParameter('inicio')){
     	$fechaa = explode("/", $request->getParameter('inicio'));
         $fechadesde = $fechaa[2]."-".$fechaa[1]."-".$fechaa[0]; 
     }
@@ -459,7 +480,7 @@ Sede: '.$oSede.'
     if($request->getParameter('fin')){
     	 $fechab = explode("/", $request->getParameter('fin'));
          $fechahasta = $fechab[2]."-".$fechab[1]."-".$fechab[0]; 
-    }
+    }*/
    
 
 
@@ -470,7 +491,7 @@ Sede: '.$oSede.'
       else
           $this->permite_seleccionar = '0';
 
-      $this->resultado = Doctrine_Core::getTable('Personas')->obtenerRecibosPorEstado($request->getParameter('seleccionar'), $request->getParameter('seleccionar2'),$fechadesde, $fechahasta);
+      $this->resultado = Doctrine_Core::getTable('Personas')->obtenerRecibosPorEstado($request->getParameter('seleccionar'), $request->getParameter('seleccionar2'),$request->getParameter('idmes'), $request->getParameter('idanio'));
   
      
   }
@@ -656,6 +677,16 @@ Sede: '.$oSede.'
 
 	    $this->estados = array(1=>'Generados');	
 
+	    $this->anioseleccionado = trim($request->getParameter('idanio', ''));
+	    $this->messeleccionado = trim($request->getParameter('idmes', ''));
+
+	    if($this->anioseleccionado=='')
+	    	 $this->anioseleccionado = date("Y");
+
+	    if($this->messeleccionado=='')
+	    	 $this->messeleccionado = date("m");
+
+
 	    if ($request->isMethod(sfRequest::POST)){
 	    	$this->msgSuccess = 'Los registros fueron marcados como cobrados';
 	        $this->msgError = $request->getParameter('msgError', '');
@@ -670,17 +701,9 @@ Sede: '.$oSede.'
 	                $arr_idrecibosgenerados[] = $seleccionados;
 	        }
 
-	        if($request->getParameter('inicio')){
-		    	$fechaa = explode("/", $request->getParameter('inicio'));
-		        $fechadesde = $fechaa[2]."-".$fechaa[1]."-".$fechaa[0]; 
-		    }
-    
-		    if($request->getParameter('fin')){
-		    	 $fechab = explode("/", $request->getParameter('fin'));
-		         $fechahasta = $fechab[2]."-".$fechab[1]."-".$fechab[0]; 
-		    }
+	       
 
-            $resultado = Doctrine_Core::getTable('Personas')->actualizarRecibosACobradosPorIds($request->getParameter('seleccionar'), $request->getParameter('seleccionar2'),$fechadesde, $fechahasta, $arr_idrecibosgenerados);
+            $resultado = Doctrine_Core::getTable('Personas')->actualizarRecibosACobradosPorIds($request->getParameter('seleccionar'), $request->getParameter('seleccionar2'),$request->getParameter('idmes', ''), $request->getParameter('idanio', ''), $arr_idrecibosgenerados);
 	       
 	    } //endif
 	     
