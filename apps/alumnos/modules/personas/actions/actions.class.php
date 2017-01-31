@@ -263,7 +263,7 @@ Sede: '.$oSede.'
         }
 
         // Si existen para generar recibos
-        $resultado = Doctrine_Core::getTable('Personas')->updPreciosSocios($arr_personas, $request->getParameter('idprecio', ''));
+        $resultado = Doctrine_Core::getTable('Personas')->updPreciosSocios($arr_personas, $request->getParameter('idprecio', ''),$request->getParameter('nuevoprecio', ''));
         $estado = 'Los precios fueron actualizados para los socios seleccionados.';
         $this->redirect($this->generateUrl('default', array('module' => 'personas',
               'action' => 'actualizarprecios', 'msgSuccess' => $estado )));
