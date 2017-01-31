@@ -85,7 +85,7 @@ $(document).ready(function(){
           <input type="button" value="Mostrar recibos" name="botonlista" id="botonlista" />
         </td>
         <td colspan="2" align="center">
-          <input type="submit" value="Imprimir Selección" id="botonimprimir" />
+          <input type="submit" value="Imprimir recibos" id="botonimprimir" />
         </td>
       </tr>
     </tfoot>
