@@ -246,6 +246,32 @@ Sede: '.$oSede.'
 
    }
 
+   public function executeActualizarpreciossocios(sfWebRequest $request)
+    {
+        $this->msgSuccess = $request->getParameter('msgSuccess', '');
+        $this->msgError = $request->getParameter('msgError', '');
+
+        $arr_personas = array();
+
+
+        // Obtiene designaciones seleccionadas en la vista en un array
+        $idcase = $request->getParameter('idcase', '');
+
+        foreach($idcase as $seleccionados){
+            if(is_numeric($seleccionados)) 
+                $arr_personas[] = $seleccionados;
+        }
+
+        // Si existen para generar recibos
+        $resultado = Doctrine_Core::getTable('Personas')->updPreciosSocios($arr_personas, $request->getParameter('idprecio', ''));
+        $estado = 'Los precios fueron actualizados para los socios seleccionados.';
+        $this->redirect($this->generateUrl('default', array('module' => 'personas',
+              'action' => 'actualizarprecios', 'msgSuccess' => $estado )));
+          
+
+   }
+
+
    public function executeImprimirrecibosseleccionados(sfWebRequest $request){
    	  $this->msgSuccess = $request->getParameter('msgSuccess', '');
         $this->msgError = $request->getParameter('msgError', '');
