@@ -33,13 +33,18 @@ class PersonasTable extends Doctrine_Table
     }	
 
     // Obtener designaciones por persona, filtrando tambien por area y sede
-    public static function obtenerRecibosAGenerar()
+    public static function obtenerRecibosAGenerar($idmes, $idanio)
     {
-        $sql ="SELECT per.idpersona, per.nombre, per.apellido, per.monto, mc.mes, DATE_FORMAT(NOW(), '%Y-%m-%d') AS fecha, YEAR(NOW()) AS anio
+        if($idmes<10)
+            $mes = "0".$idmes;
+
+        $fecharecibo = $idanio."-".$mes."-01";
+
+        $sql ="SELECT per.idpersona, per.nombre, per.apellido, per.monto, mc.mes, '".$fecharecibo."' AS fecha, '".$idanio."' AS anio
         FROM
         personas per JOIN meses_cobro mc ON per.idpersona = mc.idpersona
         LEFT JOIN recibos_generados rg ON per.idpersona = rg.idpersona AND mc.mes = rg.mes AND anio = rg.anio AND rg.estado <> 2
-        WHERE per.socio AND per.activo AND mc.mes = MONTH(NOW()) AND rg.id IS NULL ORDER BY per.apellido;  ";
+        WHERE per.socio AND per.activo AND mc.mes = ".$idmes." AND rg.id IS NULL ORDER BY per.apellido;  ";
         
         $q = Doctrine_Manager::getInstance()->getCurrentConnection()->fetchAssoc($sql);
 
@@ -47,7 +52,7 @@ class PersonasTable extends Doctrine_Table
     } 
 
     // Obtener recibos por estado
-    public static function obtenerRecibosPorEstado($idestado, $idcobrador=null, $fechadesde=null, $fechahasta=null)
+    public static function obtenerRecibosPorEstado($idestado, $idcobrador=null, $idmes=null, $idanio=null)
     {
         $sql ="SELECT rg.id, per.idpersona, per.apellido, per.nombre, CONCAT(per.apellido, ', ', per.nombre) as socio, rg.mes, rg.anio, rg.mesanio,
                 per2.idpersona as idcobrador, CONCAT(per2.apellido, ', ', per2.nombre) as cobrador, rg.monto, rg.estado
@@ -59,13 +64,38 @@ class PersonasTable extends Doctrine_Table
         if ($idcobrador <> NULL){
           $sql .=  " AND rg.idcobrador = ".$idcobrador." ";  
         }
-        if ($fechadesde <> NULL){
-          $sql .=  " AND DATE(rg.created_at) >= DATE('".$fechadesde."') ";  
+        if ($idmes <> NULL){
+          $sql .=  " AND rg.mes = ".$idmes." ";  
         }
-        if ($fechahasta <> NULL){
-          $sql .=  " AND DATE(rg.created_at) <= DATE('".$fechahasta."') ";  
+        if ($idanio <> NULL){
+          $sql .=  " AND rg.anio = ".$idanio." ";  
         }
+       
+        $sql .=  " ORDER BY per.apellido; ";  
 
+        $q = Doctrine_Manager::getInstance()->getCurrentConnection()->fetchAssoc($sql);
+
+        return $q;
+    }  
+
+    // Obtener recibos por estado
+    public static function obtenerPadronSocios($idcobrador='')
+    {
+        $sql ="SELECT per.idpersona, per.apellido, per.nombre, per.email, per.direccion, per.telefono, 
+              CASE  
+              WHEN meses.cantidad =1 THEN 'ANUAL'
+              WHEN meses.cantidad =4 THEN 'TRIMESTRAL'
+              WHEN meses.cantidad = 2 THEN 'SEMESTRAL'
+              WHEN meses.cantidad =12 THEN 'MENSUAL'
+             END as tipopago, per.monto
+              FROM personas per 
+                LEFT JOIN (SELECT idpersona, COUNT(DISTINCT(id)) as cantidad FROM meses_cobro GROUP BY idpersona) as meses ON per.idpersona =meses.idpersona
+                WHERE per.socio AND per.activo ";
+
+        if ($idcobrador <> ""){
+          $sql .=  " AND per.idcobrador = ".$idcobrador." ";  
+        }
+       
         $sql .=  " ORDER BY per.apellido; ";  
 
         $q = Doctrine_Manager::getInstance()->getCurrentConnection()->fetchAssoc($sql);
@@ -74,7 +104,7 @@ class PersonasTable extends Doctrine_Table
     }  
 
     // crear recibos de personas seleccionadas
-    public static function obtenerRecibosGeneradosPorIds($idestado, $idcobrador=null, $fechadesde=null, $fechahasta=null, $arrIdRecibosGenerados)
+    public static function obtenerRecibosGeneradosPorIds($idestado, $idcobrador=null, $idmes=null, $idanio=null, $arrIdRecibosGenerados)
     {
         
         // Definir elemenos para filtrar por IN
@@ -96,11 +126,11 @@ class PersonasTable extends Doctrine_Table
         if ($idcobrador <> NULL){
           $sql .=  " AND rg.idcobrador = ".$idcobrador." ";  
         }
-        if ($fechadesde <> NULL){
-          $sql .=  " AND DATE(rg.created_at) >= DATE('".$fechadesde."') ";  
+        if ($idmes <> NULL){
+          $sql .=  " AND rg.mes = ".$idmes." ";  
         }
-        if ($fechahasta <> NULL){
-          $sql .=  " AND DATE(rg.created_at) <= DATE('".$fechahasta."') ";  
+        if ($idanio <> NULL){
+          $sql .=  " AND rg.anio = ".$idanio." ";  
         }
         if ($datos <> ''){
           $sql .=  " AND rg.id NOT IN (".$datos.") ";  
@@ -115,7 +145,7 @@ class PersonasTable extends Doctrine_Table
     } 
 
     // crear recibos de personas seleccionadas
-    public static function actualizarRecibosACobradosPorIds($idestado, $idcobrador=null, $fechadesde=null, $fechahasta=null, $arrIdRecibosGenerados)
+    public static function actualizarRecibosACobradosPorIds($idestado, $idcobrador=null, $idmes=null, $idanio=null, $arrIdRecibosGenerados)
     {
         
         // Definir elemenos para filtrar por IN
@@ -135,11 +165,11 @@ class PersonasTable extends Doctrine_Table
         if ($idcobrador <> NULL){
           $sql .=  " AND rg.idcobrador = ".$idcobrador." ";  
         }
-        if ($fechadesde <> NULL){
-          $sql .=  " AND DATE(rg.created_at) >= DATE('".$fechadesde."') ";  
+         if ($idmes <> NULL){
+          $sql .=  " AND rg.mes = ".$idmes." ";  
         }
-        if ($fechahasta <> NULL){
-          $sql .=  " AND DATE(rg.created_at) <= DATE('".$fechahasta."') ";  
+        if ($idanio <> NULL){
+          $sql .=  " AND rg.anio = ".$idanio." ";  
         }
         if ($datos <> ''){
           $sql .=  " AND rg.id NOT IN (".$datos.") ";  
@@ -153,7 +183,7 @@ class PersonasTable extends Doctrine_Table
        
 
     // crear recibos de personas seleccionadas
-    public static function crearRecibos($arrPersonas)
+    public static function crearRecibos($arrPersonas, $idmes, $idanio)
     {
          
           
@@ -170,13 +200,13 @@ class PersonasTable extends Doctrine_Table
         }   
 
         // actualizar designaciones
-        $sql = "INSERT INTO recibos_generados SELECT null, per.idpersona, per.idcobrador, MONTH(NOW()) as mes, YEAR(NOW()) as anio, CONCAT(m.descripcion,' de ',YEAR(NOW())) as detalle, per.monto, now(), now(),1,1,1 
+        $sql = "INSERT INTO recibos_generados SELECT null, per.idpersona, per.idcobrador, ".$idmes." as mes, ".$idanio." as anio, CONCAT(m.descripcion,' de ', ".$idanio.") as detalle, per.monto, now(), now(),1,1,1 
         FROM
             personas per 
-              JOIN meses m ON m.mes = MONTH(NOW()) 
+              JOIN meses m ON m.mes = ".$idmes." 
               JOIN meses_cobro mc ON per.idpersona = mc.idpersona
               LEFT JOIN recibos_generados rg ON per.idpersona = rg.idpersona AND mc.mes = rg.mes AND anio = rg.anio AND rg.estado <> 2 
-            WHERE per.activo AND mc.mes = MONTH(NOW()) AND rg.id IS NULL "; 
+            WHERE per.activo AND mc.mes = ".$idmes." AND rg.id IS NULL "; 
 
         if ($datos<>'')    
             $sql .= " AND per.idpersona NOT IN (".$datos.") ";
