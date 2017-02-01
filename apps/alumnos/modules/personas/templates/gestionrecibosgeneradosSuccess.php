@@ -8,7 +8,7 @@ $(document).ready(function(){
     $('#botonlista').click(function() {
     // guardar la informacion de documentacion adicional del alumnos ingresada
         $.post("<?php echo url_for('personas/obtenerrecibosporestado'); ?>",
-          { seleccionar: $("#seleccionar").val(), seleccionar2: $("#seleccionar2").val(), idmes: $("#idmes").val(), fin: $("#idanio").val()},
+          { seleccionar: $("#seleccionar").val(), seleccionar2: $("#seleccionar2").val(), idmes: $("#idmes").val(), idanio: $("#idanio").val()},
         function(data){
             $('#idresultados').html(data);
         }
