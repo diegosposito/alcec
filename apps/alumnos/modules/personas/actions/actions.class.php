@@ -332,11 +332,15 @@ Sede: '.$oSede.'
 		   	$pdf->SetXY($x,$y);
             $pdf->Cell($x,5,$socio['socio'],0,0,'L');
             $y+=5;
-		    $pdf->SetXY($x,$y);        
-		    $pdf->Cell($x,5,'Recibo nro. '.$socio['id'],0,0,'L');
+		    $pdf->SetXY($x,$y);
+		    $pdf->SetFont("Times", "B", 10);        
+		    $pdf->Cell($x,5,'Recibo nro. '.$socio['id'].'  '.$socio['mesanio'],0,0,'L');
+		    $pdf->SetFont("Times", "B", 12);
 		    $y+=5;        
 		    $pdf->SetXY($x,$y); 
-		    $pdf->Cell($x,5,$socio['mesanio'],0,0,'L'); 
+		    $pdf->SetFont("Times", "B", 10); 
+		    $pdf->Cell($x,5,$socio['direccioncobro'].'   Cob Nro.'.$socio['idcobrador'],0,0,'L');
+		    $pdf->SetFont("Times", "B", 12);  
 		    $y+=5;
 		    $pdf->SetXY($x,$y); 
 		    $pdf->Cell($x,5,'$'.$socio['monto'],0,0,'L'); 
