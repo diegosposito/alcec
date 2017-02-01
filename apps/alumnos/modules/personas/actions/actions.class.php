@@ -302,7 +302,7 @@ Sede: '.$oSede.'
        
         // COMIENZA LA IMPRESION DE RECIBOS
 
-		$pdf = new PDF();
+		$pdf = new PDF(); 
 
 		$pdf->SetFont("Times", "B", 12);
 		$pdf->setPrintHeader(false);
