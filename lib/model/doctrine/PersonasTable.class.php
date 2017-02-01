@@ -130,7 +130,7 @@ class PersonasTable extends Doctrine_Table
         }
 
         $sql ="SELECT rg.id, per.idpersona, per.apellido, per.nombre, CONCAT(per.apellido, ', ', per.nombre) as socio, rg.mes, rg.anio, rg.mesanio,
-                per2.idpersona as idcobrador, CONCAT(per2.apellido, ', ', per2.nombre) as cobrador, rg.monto, rg.estado
+                per2.idpersona as idcobrador, CONCAT(per2.apellido, ', ', per2.nombre) as cobrador, rg.monto, rg.estado, per.direccioncobro 
                 FROM recibos_generados rg 
                 JOIN personas per ON rg.idpersona = per.idpersona
                 LEFT JOIN personas per2 ON rg.idcobrador = per2.idpersona
