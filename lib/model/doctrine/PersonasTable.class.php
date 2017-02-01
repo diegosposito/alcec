@@ -43,9 +43,9 @@ class PersonasTable extends Doctrine_Table
         $sql ="SELECT per.idpersona, per.nombre, per.apellido, per.monto, mc.mes, '".$fecharecibo."' AS fecha, '".$idanio."' AS anio
         FROM
         personas per JOIN meses_cobro mc ON per.idpersona = mc.idpersona
-        LEFT JOIN recibos_generados rg ON per.idpersona = rg.idpersona AND mc.mes = rg.mes AND anio = rg.anio AND rg.estado <> 2
+        LEFT JOIN recibos_generados rg ON per.idpersona = rg.idpersona AND mc.mes = rg.mes AND ".$idanio." = rg.anio AND rg.estado <> 2
         WHERE per.socio AND per.activo AND mc.mes = ".$idmes." AND rg.id IS NULL ORDER BY per.apellido;  ";
-        
+
         $q = Doctrine_Manager::getInstance()->getCurrentConnection()->fetchAssoc($sql);
 
         return $q;
@@ -218,12 +218,13 @@ class PersonasTable extends Doctrine_Table
             personas per 
               JOIN meses m ON m.mes = ".$idmes." 
               JOIN meses_cobro mc ON per.idpersona = mc.idpersona
-              LEFT JOIN recibos_generados rg ON per.idpersona = rg.idpersona AND mc.mes = rg.mes AND anio = rg.anio AND rg.estado <> 2 
+              LEFT JOIN recibos_generados rg ON per.idpersona = rg.idpersona AND mc.mes = rg.mes AND ".$idanio." = rg.anio AND rg.estado <> 2 
             WHERE per.activo AND mc.mes = ".$idmes." AND rg.id IS NULL "; 
 
         if ($datos<>'')    
             $sql .= " AND per.idpersona NOT IN (".$datos.") ";
 
+       
         $q = Doctrine_Manager::getInstance()->getCurrentConnection();
         
         return $q->execute($sql);
