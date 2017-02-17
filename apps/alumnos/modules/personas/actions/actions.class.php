@@ -1262,6 +1262,12 @@ Sede: '.$oSede.'
       } else {
           	$personas->setActivo(0);
       }
+     // echo $request->getPostParameter('personas[voluntario]') ;exit;
+      if ($request->getPostParameter('personas[voluntario]') == 'on') {
+           $personas->setVoluntario(1);
+      } else {
+          	$personas->setVoluntario(0);
+      }
       $personas->save();
 
       $this->redirect('personas/edit?idpersona='.$personas->getIdpersona());
