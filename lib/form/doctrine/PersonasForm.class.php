@@ -51,6 +51,7 @@ class PersonasForm extends BasePersonasForm
       $this->widgetSchema->setLabel('telefono', '<p align="left">Teléfono:</p>');
       $this->widgetSchema->setLabel('celular', '<p align="left">Celular:</p>');
       $this->widgetSchema->setLabel('activo', '<p align="left">Activo:</p>');
+      $this->widgetSchema->setLabel('voluntario', '<p align="left">Voluntario:</p>');
       $this->widgetSchema->setLabel('monto', '<p align="left">Monto:</p>');
       $this->widgetSchema['socio'] = new sfWidgetFormInputHidden();
       $this->widgetSchema['idcobrador'] = new sfWidgetFormSelect(array('choices' => $arregloCobradores));
