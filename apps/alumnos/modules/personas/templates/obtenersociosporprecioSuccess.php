@@ -29,8 +29,9 @@ $(document).ready(function(){
           <td width="2%" align="center" class="hed"><input type="checkbox" id="selectall" /></td>
         <?php } ?>
 
-        <td width="40%" align="center" class="hed">Socio</td>
+        <td width="50%" align="center" class="hed">Socio</td>
         <td width="20%" align="center" class="hed">Monto</td>
+        <td width="30%" align="center" class="hed">Voluntario</td>
     </tr>
     </thead>
     <tbody>
@@ -40,8 +41,9 @@ $(document).ready(function(){
           <td width="2%" align="center"><input type="checkbox" id="idcase" class="idcase" name="idcase[]" value="<?php echo $item['idpersona'] ?>" /></td>
         <?php } ?>
 
-        <td width="40%"><?php echo $item['apellido'].", ".$item['nombre'] ?></td>
+        <td width="50%"><?php echo $item['apellido'].", ".$item['nombre'] ?></td>
         <td width="20%"><?php echo '$'.$item['monto'] ?></td>
+        <td width="30%"><?php echo $item['voluntario'] ?></td>
       </tr>
       <?php } ?>
     </tbody>
