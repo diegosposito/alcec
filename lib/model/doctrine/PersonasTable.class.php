@@ -54,10 +54,10 @@ class PersonasTable extends Doctrine_Table
     // Obtener designaciones por persona, filtrando tambien por area y sede
     public static function obtenerSociosporprecio($precio)
     {
-        $sql ="SELECT per.idpersona, per.nombre, per.apellido, per.monto
+        $sql ="SELECT per.idpersona, if(per.voluntario,'Voluntario','') as voluntario, per.nombre, per.apellido, per.monto
         FROM
         personas per 
-        WHERE per.socio AND per.monto = ".$precio." ORDER BY per.apellido;  ";
+        WHERE per.socio AND per.monto = ".$precio." ORDER BY per.voluntario DESC, per.apellido ASC;  ";
         
         $q = Doctrine_Manager::getInstance()->getCurrentConnection()->fetchAssoc($sql);
 
