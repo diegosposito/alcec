@@ -548,6 +548,7 @@ Personas:
     direccioncobro: { type: string(200), primary: false, notnull: true, default: '' }
     tienefoto: { type: boolean, primary: false, notnull: true, default: 0 }  
     activo: { type: boolean, primary: false, notnull: true, default: 0 } 
+    voluntario: { type: boolean, primary: false, notnull: true, default: 0 } 
     socio: { type: boolean, primary: false, notnull: true, default: 1 }   
     nrolector: { type: string(10), primary: false, autoincrement: false, default: '' }
     otrainformacionrelevante: { type: string(2000) }
