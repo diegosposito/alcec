@@ -16,7 +16,12 @@
       </tr>
     </tfoot>
     <tbody>
-      <?php echo $form ?>
+      <?php 
+      
+      if ($form->getObject()->isNew())
+         $form->setDefault('voluntario', false);
+      
+      echo $form ?>
     </tbody>
   </table>
 </form>
