@@ -10,49 +10,49 @@
  */
 class personasActions extends sfActions
 {
-	
-	// $this->estados = array(1=>'Generados',2=>'Cancelados',3=>'Cobrados');	
+
+	// $this->estados = array(1=>'Generados',2=>'Cancelados',3=>'Cobrados');
 
 	public function executeGuardarnombre(sfWebRequest $request) {
 		$oPersona = Doctrine_Core::getTable('Personas')->find($request->getParameter('idpersona'));
 		$nombreAnterior = $oPersona->getApellido().", ". $oPersona->getNombre();
-		
+
 		$oPersona->setApellido(strtoupper($request->getParameter('apellido')));
 		$oPersona->setNombre(ucwords(strtolower($request->getParameter('nombre'))));
 		$oPersona->save();
-		
+
 		$destinatario = array('auditoriaacademica' => 'UCU - Auditoria Academica','informatica' => 'Dpto Informatica');
 
 		$remitente = $this->getUser()->getGuardUser()->getEmailAddress();
 		$oArea = Doctrine_Core::getTable('Areas')->find($this->getUser()->getProfile()->getIdarea());
 		$oSede = Doctrine_Core::getTable('Sedes')->find($this->getUser()->getProfile()->getIdsede());
-		
+
 		$mensajeEmail = '
 **************************************************************************************
 **************************************************************************************
 Se modificó el nombre del alumno '.$oPersona.', '.$oPersona->getTiposDocumentos().': '.$oPersona->getNrodoc().'.
-El nombre que se modificó fue: '.$nombreAnterior.' 	
-E-mail remitente: '.$remitente.'	
+El nombre que se modificó fue: '.$nombreAnterior.'
+E-mail remitente: '.$remitente.'
 Area: '.$oArea.'
 Sede: '.$oSede.'
 **************************************************************************************
 **************************************************************************************';
-		
+
 		$resultado = $this->getMailer()->composeAndSend(
 				$remitente,
 				$destinatario,
 				'SAO- Modificacion de nombre de alumno: '. $oPersona,
 				$mensajeEmail
-		);		
-		
+		);
+
 		echo "Se ha guardado correctamente la persona.";
-		
-		return sfView::NONE;		
+
+		return sfView::NONE;
 	}
-	
+
 	public function executeBuscarpersonas(sfWebRequest $request) {
-	
-	}	
+
+	}
 
 	// Guarda la documentacion laboral seleccionada de la persona
   public function executeGuardarestudioprevio(sfWebRequest $request) {
@@ -76,7 +76,7 @@ Sede: '.$oSede.'
   		$oEstudio->setCantmaterias($request->getParameter('numerototal'));
   		$oEstudio->setCantmatapro($request->getParameter('numeroaprobadas'));
   		$oEstudio->setPromedio($request->getParameter('promedio'));
-  		
+
   		if ($request->getParameter('concluyo') == 'on'){
           $oEstudio->setConcluyo(1);
           $oEstudio->setAnioegreso($request->getParameter('anioegreso'));
@@ -98,57 +98,57 @@ Sede: '.$oSede.'
 
   		echo "El estudio previo ha sido guardado correctamente.";
 
-  		return sfView::NONE;  	
+  		return sfView::NONE;
 	}
 
 	public function executeMesescobro(sfWebRequest $request)
     {
-     
+
       $this->persona = Doctrine::getTable('Personas')->find($request->getParameter('idpersona'));
 
       //$this->resultado = Doctrine_Core::getTable('MesesCobro')->obtenerMesesCobro($request->getParameter('idpersona'));
       $this->resultado = Doctrine_Core::getTable('MesesCobro')->obtenerSoloMesesCobro($request->getParameter('idpersona'));
-     
+
     }
 
     public function executeRegistrarcobro(sfWebRequest $request)
     {
-        
+
         if ($request->getParameter('idpersona')>0){
-       
+
        		$this->resultado = Doctrine_Core::getTable('MesesCobro')->borrarMesesCobro($request->getParameter('idpersona'));
-      
+
 	        foreach($request->getParameter('meses') as $mes){
-	          
+
 	        	$oMesesCobro = new MesesCobro();
-	  		
+
 				$oMesesCobro->setIdpersona($request->getParameter('idpersona'));
 				$oMesesCobro->setMes($mes);
-			  		
+
 			  	$oMesesCobro->save();
 	        }
         }
 
         $this->redirect('personas/mesescobro?idpersona='.$request->getParameter('idpersona'));
-     
+
     }
 
 	public function executeRegistrar(sfWebRequest $request) {
-       $this->mensaje = ""; $this->isPost = false; 
+       $this->mensaje = ""; $this->isPost = false;
        $documento=$request->getParameter('nrodocumento');
 
        if ($request->isMethod('post')){
        	   $pos = strpos($request->getParameter('nrodocumento'), '.');
-           if ($pos === false) 
+           if ($pos === false)
            	   $documento = '';
        }
 
        if ($request->isMethod('post') && $documento<>'') {
 			$this->isPost= true;
 		    $this->idtipodocumento =$request->getParameter('idtipodocumento');
-		    $this->nrodoc =preg_replace("/[^\d]/", "", $request->getParameter('nrodocumento'));	
+		    $this->nrodoc =preg_replace("/[^\d]/", "", $request->getParameter('nrodocumento'));
 		    $this->numerodoc = $request->getParameter('nrodocumento');
-		    $this->resultado = Doctrine_Core::getTable('Personas')->obtenerPersonas(2, $this->nrodoc,$request->getParameter('idtipodocumento'));			
+		    $this->resultado = Doctrine_Core::getTable('Personas')->obtenerPersonas(2, $this->nrodoc,$request->getParameter('idtipodocumento'));
 		} else {
 			$this->resultado = array();
 		}
@@ -158,7 +158,7 @@ Sede: '.$oSede.'
 
     public function executeGenerarrecibos(sfWebRequest $request)
     {
-	  
+
         $this->msgSuccess = $request->getParameter('msgSuccess', '');
 	    $this->msgError = $request->getParameter('msgError', '');
 
@@ -171,8 +171,8 @@ Sede: '.$oSede.'
 	    if($this->messeleccionado=='')
 	    	 $this->messeleccionado = date("m");
 
-	   
-	     
+
+
 	    // solo usuarios de sede central pueden asignar resoluciones
 	    if(sfContext::getInstance()->getUser()->getAttribute('id_sede','')<>'1'){
 	        $this->msgError = 'El usuario actual no está habilitado para asignar resoluciones!!';
@@ -181,24 +181,24 @@ Sede: '.$oSede.'
 
 	    if ($idsede=='')
 	        $this->idsede = sfContext::getInstance()->getUser()->getAttribute('id_sede','');
-	     
+
 	    // Obtener Sedes
 	    $this->sedes = Doctrine_Core::getTable('Sedes')->findAll();
-	      
+
 	    $this->idsede = $idsede;
     }
 
     public function executeActualizarprecios(sfWebRequest $request)
     {
-	  
+
         $this->msgSuccess = $request->getParameter('msgSuccess', '');
 	    $this->msgError = $request->getParameter('msgError', '');
 
 	    $this->precioseleccionado = trim($request->getParameter('idprecio', ''));
-	  
+
 	    $this->precios = Doctrine_Core::getTable('Personas')->obtenerPreciosdiferentes();
-	   
-	   
+
+
     }
 
     public function executeGestionrecibosgenerados(sfWebRequest $request)
@@ -217,8 +217,8 @@ Sede: '.$oSede.'
 
 	    $this->cobradores = Doctrine_Core::getTable('Personas')->obtenerCobradores();
 
-	    $this->estados = array(1=>'Generados',2=>'Cancelados',3=>'Cobrados');	 
-	     
+	    $this->estados = array(1=>'Generados',2=>'Cancelados',3=>'Cobrados');
+
 	}
 
     public function executeGrabarrecibosgenerados(sfWebRequest $request)
@@ -233,7 +233,7 @@ Sede: '.$oSede.'
         $idcase = $request->getParameter('idcase', '');
 
         foreach($idcase as $seleccionados){
-            if(is_numeric($seleccionados)) 
+            if(is_numeric($seleccionados))
                 $arr_personas[] = $seleccionados;
         }
 
@@ -242,7 +242,7 @@ Sede: '.$oSede.'
         $estado = 'Los recibos fueron generados para los socios seleccionados.';
         $this->redirect($this->generateUrl('default', array('module' => 'personas',
               'action' => 'generarrecibos', 'msgSuccess' => $estado )));
-          
+
 
    }
 
@@ -258,7 +258,7 @@ Sede: '.$oSede.'
         $idcase = $request->getParameter('idcase', '');
 
         foreach($idcase as $seleccionados){
-            if(is_numeric($seleccionados)) 
+            if(is_numeric($seleccionados))
                 $arr_personas[] = $seleccionados;
         }
 
@@ -267,7 +267,7 @@ Sede: '.$oSede.'
         $estado = 'Los precios fueron actualizados para los socios seleccionados.';
         $this->redirect($this->generateUrl('default', array('module' => 'personas',
               'action' => 'actualizarprecios', 'msgSuccess' => $estado )));
-          
+
 
    }
 
@@ -277,73 +277,78 @@ Sede: '.$oSede.'
         $this->msgError = $request->getParameter('msgError', '');
 
         $arr_idrecibosgenerados = array();
-           
+
         // Obtiene designaciones seleccionadas en la vista en un array
         $idcase = $request->getParameter('idcase', '');
 
         foreach($idcase as $seleccionados){
-            if(is_numeric($seleccionados)) 
+            if(is_numeric($seleccionados))
                 $arr_idrecibosgenerados[] = $seleccionados;
         }
 
-       
+
         /*if($request->getParameter('inicio')){
 			    	$fechaa = explode("/", $request->getParameter('inicio'));
-			        $fechadesde = $fechaa[2]."-".$fechaa[1]."-".$fechaa[0]; 
+			        $fechadesde = $fechaa[2]."-".$fechaa[1]."-".$fechaa[0];
 		}
-    
+
 		if($request->getParameter('fin')){
 			    	 $fechab = explode("/", $request->getParameter('fin'));
-			         $fechahasta = $fechab[2]."-".$fechab[1]."-".$fechab[0]; 
+			         $fechahasta = $fechab[2]."-".$fechab[1]."-".$fechab[0];
 		}*/
-   
+
         $resultado = Doctrine_Core::getTable('Personas')->obtenerRecibosGeneradosPorIds($request->getParameter('seleccionar'), $request->getParameter('seleccionar2'),$request->getParameter('idmes'), $request->getParameter('idanio'),$arr_idrecibosgenerados);
 
-       
+
         // COMIENZA LA IMPRESION DE RECIBOS
 
-		$pdf = new PDF(); 
+		$pdf = new PDF();
 
 		$pdf->SetFont("Times", "B", 12);
 		$pdf->setPrintHeader(false);
-		$pdf->setPrintFooter(false); 
- 
+		$pdf->setPrintFooter(false);
+
 		$pdf->AddPage();
 		$current_date = date("Y");
-		
+
 		$x=128;
 		$y = 10;
 		$contador = 0;
 		$Ximage = 113;
 		$inicio = 0;
 		$Yimage = 2;
-		
+
 		$border = array('LRTB' => array('width' => 0.1, 'cap' => 'square', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
 
-	
-	    foreach ($resultado as $socio){	
+
+	    foreach ($resultado as $socio){
 
 	    	$Ximage = ($Ximage==13 ? 113 : 13);
 	    	$x = ($x==28 ? 128 : 28);
 	    	$inicio = $y;
 
-	    	$pdf->Image('images/alcecrecib.png', $Ximage, $Yimage, 80, 0, 'PNG', '', '', false, 300, '', false, false, $border, false, false, false); 
-		    			    		
+	    	$pdf->Image('images/alcecrecib.png', $Ximage, $Yimage, 80, 0, 'PNG', '', '', false, 300, '', false, false, $border, false, false, false);
+
 		   	$pdf->SetXY($x,$y);
             $pdf->Cell($x,5,$socio['socio'],0,0,'L');
             $y+=5;
 		    $pdf->SetXY($x,$y);
-		    $pdf->SetFont("Times", "B", 10);        
+		    $pdf->SetFont("Times", "B", 10);
 		    $pdf->Cell($x,5,'Recibo nro. '.$socio['id'].'  '.$socio['mesanio'],0,0,'L');
 		    $pdf->SetFont("Times", "B", 12);
-		    $y+=5;        
-		    $pdf->SetXY($x,$y); 
-		    $pdf->SetFont("Times", "B", 10); 
-		    $pdf->Cell($x,5,$socio['direccioncobro'].'   Cob Nro.'.$socio['idcobrador'],0,0,'L');
-		    $pdf->SetFont("Times", "B", 12);  
 		    $y+=5;
-		    $pdf->SetXY($x,$y); 
-		    $pdf->Cell($x,5,'$'.$socio['monto'],0,0,'L'); 
+		    $pdf->SetXY($x,$y);
+		    $pdf->SetFont("Times", "B", 10);
+		    $pdf->Cell($x,5,$socio['direccioncobro'].'   Cob Nro.'.$socio['idcobrador'],0,0,'L');
+		    $pdf->SetFont("Times", "B", 12);
+		    $y+=5;
+		    $pdf->SetXY($x,$y);
+		    $pdf->Cell($x,5,'$'.$socio['monto'],0,0,'L');
+
+				$pdf->SetFont("Times", "B", 7);
+		    $pdf->SetXY($x+25,$y);
+		    $pdf->Cell($x+25,5,$socio['tipopago'],0,0,'L');
+				$pdf->SetFont("Times", "B", 12);
 
 		    $contador++;
 
@@ -353,22 +358,22 @@ Sede: '.$oSede.'
 		    	$y+=35;
 		    	$Yimage+=50;
 		    }
-		    
-		
+
+
  			if($y>=250) {
 				$pdf->AddPage();
 				$y=10;
 				$Yimage=2;
 			}
-	
-		} // fin (foreach)	
 
-			 
+		} // fin (foreach)
+
+
 		$pdf->Output('recibos.pdf', 'I');
- 
+
 		// stop symfony process
 		throw new sfStopException();
-				
+
 		return sfView::NONE;
    }
 
@@ -379,12 +384,12 @@ Sede: '.$oSede.'
         $arr_idrecibosgenerados = array();
 
 
-           
+
         // Obtiene designaciones seleccionadas en la vista en un array
         $idcase = $request->getParameter('idcase', '');
 
         foreach($idcase as $seleccionados){
-            if(is_numeric($seleccionados)) 
+            if(is_numeric($seleccionados))
                 $arr_idrecibosgenerados[] = $seleccionados;
         }
 
@@ -409,12 +414,12 @@ Sede: '.$oSede.'
         $this->msgError = $request->getParameter('msgError', '');
 
         $arr_idrecibosgenerados = array();
-           
+
         // Obtiene designaciones seleccionadas en la vista en un array
         $idcase = $request->getParameter('idcase', '');
 
         foreach($idcase as $seleccionados){
-            if(is_numeric($seleccionados)) 
+            if(is_numeric($seleccionados))
                 $arr_idrecibosgenerados[] = $seleccionados;
         }
 
@@ -433,46 +438,46 @@ Sede: '.$oSede.'
 
 		$pdf->SetFont("Times", "", 9);
 		$pdf->setPrintHeader(false);
-		$pdf->setPrintFooter(false); 
- 
+		$pdf->setPrintFooter(false);
+
 		$pdf->AddPage();
 		$current_date = date("Y");
 		$encabezado = '
 			<div style="text-align: center; font-family: Times New Roman,Times,serif;"><span
 			style="font-size: 12;"><img src="'.$request->getRelativeUrlRoot().'/images/alcec3.jpg" width="550px">
-			Generar recibos: '.$current_date.'</div>';        
+			Generar recibos: '.$current_date.'</div>';
 
-		$pdf->writeHTML($encabezado, true, false, true, false, '');   
-		
+		$pdf->writeHTML($encabezado, true, false, true, false, '');
+
 		$y = 60;
 		$pdf->SetXY(10,$y);
-		$pdf->Cell(10,5,'Nro Recibo',0,0,'C');    
+		$pdf->Cell(10,5,'Nro Recibo',0,0,'C');
 		$pdf->SetXY(20,$y);
-		$pdf->Cell(80,5,'Nombre',0,0,'C');    
+		$pdf->Cell(80,5,'Nombre',0,0,'C');
 		$pdf->SetXY(20,$y);
-		$pdf->Cell(225,5,'Mes',0,0,'C'); 
+		$pdf->Cell(225,5,'Mes',0,0,'C');
 		$pdf->SetXY(20,$y);
-		$pdf->Cell(280,5,'Monto',0,0,'C'); 
+		$pdf->Cell(280,5,'Monto',0,0,'C');
 		$pdf->SetXY(20,$y);
-		$y = $y + 5;		
+		$y = $y + 5;
 		$contador = 1;
-		
+
 		$pdf->Line(10,$y,199,$y);
-		
-	    foreach ($resultado as $socio){	
-		    			    		
+
+	    foreach ($resultado as $socio){
+
 		   	$pdf->SetXY(0,$y-5);
             $pdf->SetXY(10,$y);
 		    $pdf->Cell(10,5,$socio['id'],0,0,'L');
-		    $pdf->SetXY(20,$y);        
-		    $pdf->Cell(80,5,$socio['socio'],0,0,'L');        
-		    $pdf->SetXY(120,$y); 
-		    $pdf->Cell(10,5,$socio['mesanio'],0,0,'L'); 
-		    $pdf->SetXY(160,$y); 
-		    $pdf->Cell(10,5,$socio['monto'],0,0,'L'); 
-		    
-		
- 			$y = $y + 5;  
+		    $pdf->SetXY(20,$y);
+		    $pdf->Cell(80,5,$socio['socio'],0,0,'L');
+		    $pdf->SetXY(120,$y);
+		    $pdf->Cell(10,5,$socio['mesanio'],0,0,'L');
+		    $pdf->SetXY(160,$y);
+		    $pdf->Cell(10,5,$socio['monto'],0,0,'L');
+
+
+ 			$y = $y + 5;
 		 	// add a page
 			if($y>=265) {
 				$pdf->AddPage();
@@ -480,64 +485,64 @@ Sede: '.$oSede.'
 				$encabezado = '
 			<div style="text-align: center; font-family: Times New Roman,Times,serif;"><span
 			style="font-size: 12;"><img src="'.$request->getRelativeUrlRoot().'/images/alcec3.jpg" width="550px">
-			Generar Recibos: '.$current_date.'</div>';        
-	
-				$pdf->writeHTML($encabezado, true, false, true, false, '');   
+			Generar Recibos: '.$current_date.'</div>';
+
+				$pdf->writeHTML($encabezado, true, false, true, false, '');
 				$y=60;
 
 			}
-	
-		    } // fin (foreach)	
 
-			 
+		    } // fin (foreach)
+
+
 		$pdf->Output('recibos.pdf', 'I');
- 
+
 		// stop symfony process
 		throw new sfStopException();
-				
+
 		return sfView::NONE;
 
    }
 
     public function executeObtenerrecibosgenerados(sfWebRequest $request)
   {
-      
+
 
       $this->msgSuccess = $request->getParameter('msgSuccess', '');
       $this->msgError = $request->getParameter('msgError', '');
-      
+
       $this->resultado = Doctrine_Core::getTable('Personas')->obtenerRecibosAGenerar($request->getParameter('idmes'),$request->getParameter('idanio'));
-  
+
       $this->permite_seleccionar = $request->getParameter('permite_seleccionar');
 
   }
 
      public function executeObtenersociosporprecio(sfWebRequest $request)
   {
-      
+
 
       $this->msgSuccess = $request->getParameter('msgSuccess', '');
       $this->msgError = $request->getParameter('msgError', '');
-      
+
       $this->resultado = Doctrine_Core::getTable('Personas')->obtenerSociosporprecio($request->getParameter('idprecio'));
-  
+
       $this->permite_seleccionar = $request->getParameter('permite_seleccionar');
 
   }
 
    public function executeObtenerrecibosporestado(sfWebRequest $request)
   {
-    
+
    /* if($request->getParameter('inicio')){
     	$fechaa = explode("/", $request->getParameter('inicio'));
-        $fechadesde = $fechaa[2]."-".$fechaa[1]."-".$fechaa[0]; 
+        $fechadesde = $fechaa[2]."-".$fechaa[1]."-".$fechaa[0];
     }
-    
+
     if($request->getParameter('fin')){
     	 $fechab = explode("/", $request->getParameter('fin'));
-         $fechahasta = $fechab[2]."-".$fechab[1]."-".$fechab[0]; 
+         $fechahasta = $fechab[2]."-".$fechab[1]."-".$fechab[0];
     }*/
-   
+
 
 
       $this->msgSuccess = $request->getParameter('msgSuccess', '');
@@ -548,17 +553,17 @@ Sede: '.$oSede.'
           $this->permite_seleccionar = '0';
 
       $this->resultado = Doctrine_Core::getTable('Personas')->obtenerRecibosPorEstado($request->getParameter('seleccionar'), $request->getParameter('seleccionar2'),$request->getParameter('idmes'), $request->getParameter('idanio'));
-  
-     
+
+
   }
 
-    public function executeModificarregistro(sfWebRequest $request)	{	
+    public function executeModificarregistro(sfWebRequest $request)	{
 
     	// Busca si existe la persona
 		if($request->getParameter('idpersona')>1){
 		        $oPersona = Doctrine_Core::getTable('Personas')->find($request->getParameter('idpersona'));
 		    } else {
-		        $oPersona = new Personas(); 
+		        $oPersona = new Personas();
 		        $oPersona->setIdtipodoc($request->getParameter('idtipodocumento'));
 		        $oPersona->setNumerodoc($request->getParameter('nrodocumento'));
         }
@@ -568,18 +573,18 @@ Sede: '.$oSede.'
 		$this->emailucu = 0;
 		$this->activo = 0;
 		$this->idpersona = $oPersona->getIdpersona();
-		
+
 		// Si existe obtiene todos los datos personales y los muestra en pantalla
 		$this->form->setDefault('idpersona', $oPersona->getIdpersona());
-		$this->form->setDefault('idtipodocumento', $oPersona->getIdtipodoc());		
+		$this->form->setDefault('idtipodocumento', $oPersona->getIdtipodoc());
 		$oTipoDocumento = Doctrine_Core::getTable('TiposDocumentos')->find($oPersona->getIdtipodoc());
-		$this->form->setDefault('tipodocumento', $oTipoDocumento->getDescripcion()."(".$oTipoDocumento->getPaises()->getAbreviacion().")");	
+		$this->form->setDefault('tipodocumento', $oTipoDocumento->getDescripcion()."(".$oTipoDocumento->getPaises()->getAbreviacion().")");
 		if($oPersona->getNumerodoc()) {
 			$this->form->setDefault('nrodocumento', $oPersona->getNumerodoc());
 		} else {
-			$this->form->setDefault('nrodocumento', $oPersona->getNrodoc());		
+			$this->form->setDefault('nrodocumento', $oPersona->getNrodoc());
 		}
-		
+
 		$this->form->setDefault('nombre', $oPersona->getNombre());
 		$this->form->setDefault('apellido', $oPersona->getApellido());
 		$this->form->setDefault('idsexo', $oPersona->getIdsexo());
@@ -620,10 +625,10 @@ Sede: '.$oSede.'
 			$this->form->setDefault('email1', $oContacto->getEmail1());
 			if ($oContacto->getEmail() != NULL) {
 				$this->email = 1;
-			}	 
+			}
 			if ($oContacto->getEmail1() != NULL) {
 				$this->emailucu = 1;
-			} 
+			}
 
 		} else {
 			//$this->idciudadnac = 0;
@@ -632,19 +637,19 @@ Sede: '.$oSede.'
 
 		// Obtiene otra informacion relevante de persona
 		$this->form->setDefault('informacionrelevante', $oPersona->getOtrainformacionrelevante());
-		
+
 		$this->setTemplate('inscribir');
-	}	
-	
+	}
+
 	public function executeModificarnombre(sfWebRequest $request)	{
 		// Busca si existe la persona
 		$this->idpersona = $request->getParameter('idpersona');
 		$oPersona = Doctrine_Core::getTable('Personas')->find($this->idpersona);
-	
+
 		$this->form = new InscripcionesAspiranteForm();
 		$this->email = 0;
 		$this->activo = 0;
-	
+
 		// Si existe obtiene todos los datos personales y los muestra en pantalla
 		$this->form->setDefault('idpersona', $this->idpersona);
 		$this->form->setDefault('idtipodocumento', $oPersona->getIdtipodoc());
@@ -655,7 +660,7 @@ Sede: '.$oSede.'
 		} else {
 			$this->form->setDefault('nrodocumento', $oPersona->getNrodoc());
 		}
-	
+
 		$this->form->setDefault('nombre', $oPersona->getNombre());
 		$this->form->setDefault('apellido', $oPersona->getApellido());
 		$this->form->setDefault('idsexo', $oPersona->getIdsexo());
@@ -668,14 +673,14 @@ Sede: '.$oSede.'
 		$this->idpaisnac = $oPaisNacimiento->getIdpais();
 		$arr = explode('-', $oPersona->getFechanac());
 		$this->form->setDefault('fechanacimiento', $arr[2]."-".$arr[1]."-".$arr[0]);
-	
+
 	}
-		
+
 	public function executeGuardarinformacionpersonal(sfWebRequest $request) {
 		$numerodoc = $request->getParameter('nrodocumento');
 		$nrodoc = preg_replace("/[^\d]/", "", $numerodoc);
 		$fechaingreso = date('Y-m-d');
-	
+
 		$arr = explode('-', $request->getParameter('fechanacimiento'));
 		$fechanacimiento = $arr[2]."-".$arr[1]."-".$arr[0];
 		if ($request->getParameter('internacional')=="on") {
@@ -683,7 +688,7 @@ Sede: '.$oSede.'
 		} else {
 			$internacional = 0;
 		}
-	
+
 		if($request->getParameter('idpersona')){
 			$oPersona = Doctrine::getTable('Personas')->find($request->getParameter('idpersona'));
 		} else {
@@ -701,14 +706,14 @@ Sede: '.$oSede.'
 		$oPersona->setIdciudadnac($request->getParameter('ciudadnacimiento'));
 		$oPersona->setFechanac($fechanacimiento);
 		$oPersona->save();
-		
+
 		echo json_encode(array("idpersona"=>$oPersona->getIdpersona(),"mensaje"=>"La persona ha sido guardado correctamente."));
-	
+
 		return sfView::NONE;
 	}
 
 	public function executeGuardarinformacionrelevante(sfWebRequest $request) {
-		
+
 		if($request->getParameter('idpersona')){
 			$oPersona = Doctrine::getTable('Personas')->find($request->getParameter('idpersona'));
 			$oPersona->setOtrainformacionrelevante($request->getParameter('informacionrelevante'));
@@ -716,9 +721,9 @@ Sede: '.$oSede.'
 		    echo json_encode(array("idpersona"=>$request->getParameter('idpersona'),"mensaje"=>"La información ha sido guardado correctamente."));
 		} else {
 			echo json_encode(array("idpersona"=>"","mensaje"=>"La información no pudo ser guardada."));
-	
+
 		}
-		
+
 		return sfView::NONE;
 	}
 
@@ -731,7 +736,7 @@ Sede: '.$oSede.'
 
 	    $this->cobradores = Doctrine_Core::getTable('Personas')->obtenerCobradores();
 
-	    $this->estados = array(1=>'Generados');	
+	    $this->estados = array(1=>'Generados');
 
 	    $this->anioseleccionado = trim($request->getParameter('idanio', ''));
 	    $this->messeleccionado = trim($request->getParameter('idmes', ''));
@@ -753,27 +758,27 @@ Sede: '.$oSede.'
 	        $idcase = $request->getParameter('idcase', '');
 
 	        foreach($idcase as $seleccionados){
-	            if(is_numeric($seleccionados)) 
+	            if(is_numeric($seleccionados))
 	                $arr_idrecibosgenerados[] = $seleccionados;
 	        }
 
-	       
+
 
             $resultado = Doctrine_Core::getTable('Personas')->actualizarRecibosACobradosPorIds($request->getParameter('seleccionar'), $request->getParameter('seleccionar2'),$request->getParameter('idmes', ''), $request->getParameter('idanio', ''), $arr_idrecibosgenerados);
-	       
+
 	    } //endif
-	     
+
 	}
-	
+
 	public function executeModificar(sfWebRequest $request)	{
 		// Busca si existe la persona
 		$this->idpersona = $request->getParameter('idpersona');
 		$oPersona = Doctrine_Core::getTable('Personas')->find($this->idpersona);
-	
+
 		$this->form = new InscripcionesAspiranteForm();
 		$this->email = 0;
 		$this->activo = 0;
-	
+
 		// Si existe obtiene todos los datos personales y los muestra en pantalla
 		$this->form->setDefault('idpersona', $this->idpersona);
 		$this->form->setDefault('idtipodocumento', $oPersona->getIdtipodoc());
@@ -784,7 +789,7 @@ Sede: '.$oSede.'
 		} else {
 			$this->form->setDefault('nrodocumento', $oPersona->getNrodoc());
 		}
-	
+
 		$this->form->setDefault('nombre', $oPersona->getNombre());
 		$this->form->setDefault('apellido', $oPersona->getApellido());
 		$this->form->setDefault('idsexo', $oPersona->getIdsexo());
@@ -797,7 +802,7 @@ Sede: '.$oSede.'
 		$this->idpaisnac = $oPaisNacimiento->getIdpais();
 		$arr = explode('-', $oPersona->getFechanac());
 		$this->form->setDefault('fechanacimiento', $arr[2]."-".$arr[1]."-".$arr[0]);
-	
+
 		// Obtiene el contecto de la persona
 		$oContacto = $oPersona->getContacto();
 		if($oContacto){
@@ -830,13 +835,13 @@ Sede: '.$oSede.'
 			$this->idciudadres = 0;
 		}
 	}
-		
+
 	// Obtiene los estudios previos de la persona
 	public function executeObtenerestudiosprevios(sfWebRequest $request)	{
 		$persona = Doctrine_Core::getTable('Personas')->find($request->getParameter('idpersona'));
 		$this->alumno = Doctrine_Core::getTable('Alumnos')->find($request->getParameter('idalumno'));
-		// Obtiene los estudios previos de la persona					
-		$this->estudiosprevios = $persona->getEstudiosPrevios();			
+		// Obtiene los estudios previos de la persona
+		$this->estudiosprevios = $persona->getEstudiosPrevios();
 	}
 
 	// Obtiene los estudios previos de la persona
@@ -844,37 +849,37 @@ Sede: '.$oSede.'
 		$persona = Doctrine_Core::getTable('Personas')->find($request->getParameter('idpersona'));
 		//$persona = Doctrine_Core::getTable('Personas')->find(18133);
 		//$this->alumno = Doctrine_Core::getTable('Alumnos')->find($request->getParameter('idalumno'));
-		// Obtiene los estudios previos de la persona					
-		$this->estudiosprevios = $persona->getEstudiosPrevios();			
+		// Obtiene los estudios previos de la persona
+		$this->estudiosprevios = $persona->getEstudiosPrevios();
 	}
-	
+
 	public function executeBuscar(sfWebRequest $request)
 	{
 		$this->form = new BuscarAlumnosForm(array(
 			'url' => $this->url,
 		    'titulo' => $this->titulo,
-			'tipo' => $this->tipo,				
+			'tipo' => $this->tipo,
 			'referer' => $request->getGetParameter('referer', str_replace($request->getUriPrefix(), '', $request->getUri()))
-		));	
+		));
 
 		if ($request->isMethod('post')) {
 			$this->form->bind($request->getParameter($this->form->getName()));
 
 			if ($this->form->isValid())	{
 				$arreglo = $request->getParameter($this->form->getName());
-				
+
         		$this->idplanestudio = $arreglo['idplanestudio'];
         		$this->tipocriterio = $arreglo['tipocriterio'];
         		$this->criterio = $arreglo['criterio'];
         		$this->titulo = $arreglo['titulo'];
         		$this->tipo = $arreglo['tipo'];
 
-        		if(strlen($this->criterio)>2)        	
-  				    $this->resultado = Doctrine_Core::getTable('Alumnos')->buscarPersonas($this->tipocriterio, $this->criterio, $this->idplanestudio, $this->getUser()->getProfile()->getIdsede(), $this->tipo);						
+        		if(strlen($this->criterio)>2)
+  				    $this->resultado = Doctrine_Core::getTable('Alumnos')->buscarPersonas($this->tipocriterio, $this->criterio, $this->idplanestudio, $this->getUser()->getProfile()->getIdsede(), $this->tipo);
 			    else
 			    	$this->resultado =NULL;
-        	
-  				
+
+
 			}
 		} else {
 			$this->resultado = array();
@@ -886,59 +891,59 @@ Sede: '.$oSede.'
 		$this->form = new BuscarAlumnosForm(array(
 			'url' => $this->url,
 		    'titulo' => $this->titulo,
-			'tipo' => $this->tipo,				
+			'tipo' => $this->tipo,
 			'referer' => $request->getGetParameter('referer', str_replace($request->getUriPrefix(), '', $request->getUri()))
-		));	
+		));
 
 		if ($request->isMethod('post')) {
 			$this->form->bind($request->getParameter($this->form->getName()));
 
 			if ($this->form->isValid())	{
 				$arreglo = $request->getParameter($this->form->getName());
-				
+
         		$this->idplanestudio = $arreglo['idplanestudio'];
         		$this->tipocriterio = $arreglo['tipocriterio'];
         		$this->criterio = $arreglo['criterio'];
         		$this->titulo = $arreglo['titulo'];
         		$this->tipo = $arreglo['tipo'];
-        	
-  				$this->resultado = Doctrine_Core::getTable('Alumnos')->buscarCobrador($this->tipocriterio, $this->criterio, $this->idplanestudio, $this->getUser()->getProfile()->getIdsede(), $this->tipo);			
+
+  				$this->resultado = Doctrine_Core::getTable('Alumnos')->buscarCobrador($this->tipocriterio, $this->criterio, $this->idplanestudio, $this->getUser()->getProfile()->getIdsede(), $this->tipo);
 			}
 		} else {
 			$this->resultado = array();
 		}
 	}
 
-	
+
 	public function executeBuscarcertificado(sfWebRequest $request)
 	{
 		$this->form = new BuscarAlumnosForm(array(
 			'url' => $this->url,
 		    'titulo' => $this->titulo,
-			'tipo' => $this->tipo,				
+			'tipo' => $this->tipo,
 			'referer' => $request->getGetParameter('referer', str_replace($request->getUriPrefix(), '', $request->getUri()))
-		));	
+		));
 
 		if ($request->isMethod('post')) {
 			$this->form->bind($request->getParameter($this->form->getName()));
 
 			if ($this->form->isValid())	{
 				$arreglo = $request->getParameter($this->form->getName());
-				
+
         		$this->idplanestudio = $arreglo['idplanestudio'];
         		$this->tipocriterio = $arreglo['tipocriterio'];
         		$this->criterio = $arreglo['criterio'];
         		$this->titulo = $arreglo['titulo'];
         		$this->tipo = $arreglo['tipo'];
-        	
-  				$this->resultado = Doctrine_Core::getTable('Alumnos')->buscarAlumnos($this->tipocriterio, $this->criterio, $this->idplanestudio, $this->getUser()->getProfile()->getIdsede(), $this->tipo);			
+
+  				$this->resultado = Doctrine_Core::getTable('Alumnos')->buscarAlumnos($this->tipocriterio, $this->criterio, $this->idplanestudio, $this->getUser()->getProfile()->getIdsede(), $this->tipo);
 			}
 		} else {
 			$this->resultado = array();
 		}
 	}
 
-  
+
   public function executeUpdatecobrador(sfWebRequest $request)
   {
     $this->forward404Unless($request->isMethod(sfRequest::POST) || $request->isMethod(sfRequest::PUT));
@@ -974,13 +979,13 @@ Sede: '.$oSede.'
   {
      // $this->socio = $request->getParameter('socio');
       $this->form = new PersonasForm();
-      $this->form->setDefault('socio', 1);  
+      $this->form->setDefault('socio', 1);
   }
 
   public function executeNewcobrador(sfWebRequest $request)
   {
     $this->form = new CobradoresForm();
-    $this->form->setDefault('socio', 0);  
+    $this->form->setDefault('socio', 0);
   }
 
   public function executeCreate(sfWebRequest $request)
@@ -1032,60 +1037,60 @@ Sede: '.$oSede.'
     // **********************************
     // Obtener Analitico Final
     //***********************************
-    
+
     $soapclient = new nusoap_client("http://prueba.com");
-  
+
     //llamamos la función implementada en el server.php de la siguiente manera
     $resultado = $soapclient->call('getpersona',array( 'value'=> $request->getParameter('idp')));
     $this->persona = unserialize(base64_decode($resultado));
-         
-    $this->analitico = ""; 
-  
+
+    $this->analitico = "";
+
     if ($request->getParameter('idc')){
       $analitico = $soapclient->call('obteneranalitico',array( 'idp'=> $request->getParameter('idp'),  'idc'=> $request->getParameter('idc')));
       $analitico_final = unserialize(base64_decode($analitico));
     }
 
-    //***********************************  
+    //***********************************
     $config = sfTCPDFPluginConfigHandler::loadConfig();
- 
+
     // pdf object
-    $pdf = new sfTCPDF("P", "mm", "A4", true, 'UTF-8', false);  
+    $pdf = new sfTCPDF("P", "mm", "A4", true, 'UTF-8', false);
    // $pdf = new sfTCPDF();
-        
+
     // settings
     $pdf->SetFont("Times", "", 9);
 
     //$pdf->AddFont('SerifaBT','','serifabt.php');
-    // set header and footer fonts  
-    $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));  
-      
-    // set default monospaced font  
-    $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);  
-      
-    //set margins  
-    $pdf->SetMargins(PDF_MARGIN_LEFT-5, PDF_MARGIN_TOP-17, PDF_MARGIN_RIGHT + 10);  
-    $pdf->SetHeaderMargin(PDF_MARGIN_HEADER-20);  
-    $pdf->SetFooterMargin(PDF_MARGIN_FOOTER-35);  
-      
-    //set auto page breaks  
-    $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM-25);  
+    // set header and footer fonts
+    $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+    // set default monospaced font
+    $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+    //set margins
+    $pdf->SetMargins(PDF_MARGIN_LEFT-5, PDF_MARGIN_TOP-17, PDF_MARGIN_RIGHT + 10);
+    $pdf->SetHeaderMargin(PDF_MARGIN_HEADER-20);
+    $pdf->SetFooterMargin(PDF_MARGIN_FOOTER-35);
+
+    //set auto page breaks
+    $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM-25);
 
     // sentencias para retirar encabezados y pie por defecto
     $pdf->setPrintHeader(false);
-    $pdf->setPrintFooter(false);  
-        
+    $pdf->setPrintFooter(false);
+
     // add a page
     $pdf->AddPage();
-                
+
     $encabezado = '<br><div style="text-align: center; width: 850px; font-family: Times New Roman,Times,serif;"><span
       style="font-size: 12;"><img src="'.$request->getRelativeUrlRoot().'/images/CabeceraSIG-UCU.jpg" width="850px">
-      CERTIFICADO ANALITICO PARCIAL '.'</div>'; 
+      CERTIFICADO ANALITICO PARCIAL '.'</div>';
 
     $conste = '
       <div style="text-align: left; font-family: Times New Roman,Times,serif;"><span
-      style="font-size: 10;"> CONSTE que APELLIDO, Nombre, DNI Nº 18123123 alumno de la carrera CARRERA, que se dicta en la FACULTAD perteneciente a la Universidad de Concepción del Uruguay, ha aprobado las asignaturas que a continuación se detallan: '.'</div>';          
-  
+      style="font-size: 10;"> CONSTE que APELLIDO, Nombre, DNI Nº 18123123 alumno de la carrera CARRERA, que se dicta en la FACULTAD perteneciente a la Universidad de Concepción del Uruguay, ha aprobado las asignaturas que a continuación se detallan: '.'</div>';
+
     $pdf->writeHTML($encabezado, true, false, true, false, '');
 
     $pdf->SetXY(180,0);
@@ -1093,64 +1098,64 @@ Sede: '.$oSede.'
     $pdf->Cell(10,50,'Facultad Ciencias Juridicas',0,0,'R');
     $pdf->SetXY(180,5);
     $pdf->Cell(10,52,'Abogacia',0,0,'R');
-    $pdf->SetFont("Times", "", 9); 
+    $pdf->SetFont("Times", "", 9);
 
     $pdf->SetXY(10,45);
     $pdf->writeHTML($conste, true, false, true, false, '');
-    $pdf->SetXY(10,57); 
-    $pdf->Cell(20,10,'FECHA',0,0,'L');    
+    $pdf->SetXY(10,57);
+    $pdf->Cell(20,10,'FECHA',0,0,'L');
     $pdf->SetXY(25,57);
-    $pdf->Cell(20,10,'ASIGNATURA',0,0,'L');    
+    $pdf->Cell(20,10,'ASIGNATURA',0,0,'L');
     $pdf->SetXY(130,57);
-    $pdf->Cell(20,10,'CALIFICACION',0,0,'L');    
+    $pdf->Cell(20,10,'CALIFICACION',0,0,'L');
     $pdf->SetXY(160,57);
-    $pdf->Cell(20,10,'LIBRO',0,0,'L');    
+    $pdf->Cell(20,10,'LIBRO',0,0,'L');
     $pdf->SetXY(176,57);
-    $pdf->Cell(20,10,'FOLIO',0,0,'L');    
+    $pdf->Cell(20,10,'FOLIO',0,0,'L');
 
     $oAreas = new Areas();
     $oAlumnos=$oAreas->obtenerAspirantesCicloArea($this->getUser()->getAttribute('cohorte'),$this->getUser()->getProfile()->getIdarea(),$this->getUser()->getProfile()->getIdsede());
-    
+
     $y=60;
     $arrYears = array (1 => "Primer año", 2 => "Segundo año", 3 => "Tercer año", 4 => "Cuarto año",  5 => "Quinto año", 6 => "Sexto año");
     $anioactual = 0; $sumanotas = 0; $cantidad = 0; $canti = 0; $contador = 0;
-     
+
 
     // SI existen registros de materias asociados al Alumno
     if($analitico_final){
-        foreach ($analitico_final as $notas){  
+        foreach ($analitico_final as $notas){
 
              // Determinar año actual
              if ($anioactual != $notas['curso']) {
-                $anioactual = $notas['curso'];  
+                $anioactual = $notas['curso'];
                 $pdf->SetLineWidth(0.7);
                 $pdf->SetFont('', 'B');
                 $pdf->Line(9,$y+6,199,$y+6);
-                $pdf->Line(9,$y+12,199,$y+12); 
+                $pdf->Line(9,$y+12,199,$y+12);
                 $y=$y+5;
                 $pdf->SetXY(0,$y-2);
                 //Se muestra una etiqueta con el año
                 $pdf->Cell(200,10,$arrYears[$anioactual],0,0,'C');
-                $pdf->SetFont('');      
+                $pdf->SetFont('');
              }
-           
-                                   
+
+
             $y=$y+4;
             $pdf->SetXY(0,$y-4);
-                  
-            $pdf->SetXY(10,$y);        
-            $pdf->Cell(10,10, $notas['fecha']); 
-            $pdf->SetXY(30,$y);        
-            $pdf->Cell(10,10, $notas['nombre']);  
-            $pdf->SetXY(140,$y);        
-            $pdf->Cell(10,10, $notas['calificacion']." ".$notas['nota']);  
-            $pdf->SetXY(160,$y);        
-            $pdf->Cell(10,10, $notas['Libro']);  
-            $pdf->SetXY(180,$y);        
-            $pdf->Cell(10,10, $notas['folio']);  
-            $pdf->Line(9,$y+10,199,$y+10); 
-                     
-            $y=$y+4; 
+
+            $pdf->SetXY(10,$y);
+            $pdf->Cell(10,10, $notas['fecha']);
+            $pdf->SetXY(30,$y);
+            $pdf->Cell(10,10, $notas['nombre']);
+            $pdf->SetXY(140,$y);
+            $pdf->Cell(10,10, $notas['calificacion']." ".$notas['nota']);
+            $pdf->SetXY(160,$y);
+            $pdf->Cell(10,10, $notas['Libro']);
+            $pdf->SetXY(180,$y);
+            $pdf->Cell(10,10, $notas['folio']);
+            $pdf->Line(9,$y+10,199,$y+10);
+
+            $y=$y+4;
             $contador++; $contadortotal++;
             $sumanotas+=$notas['calificacion'];
 
@@ -1158,16 +1163,16 @@ Sede: '.$oSede.'
               if ($contador==23){
 
                  $contador=1;
- 
+
                  $this->Pie($pdf, 1);
 
                 // add a page
                  $pdf->AddPage();
 
                  $pdf->SetFont("Times", "", 9);
-                              
+
                  $pdf->writeHTML($encabezado, true, false, true, false, '');
-    
+
                  $pdf->SetXY(170,0);
                  $pdf->SetFont("Times", "", 12);
                  $pdf->Cell(10,50,'Facultad Ciencias Juridicas',0,0,'R');
@@ -1178,56 +1183,56 @@ Sede: '.$oSede.'
 
                  $pdf->SetXY(10,45);
                  $pdf->writeHTML($conste, true, false, true, false, '');
-                 $pdf->SetXY(10,57); 
-                 $pdf->Cell(20,10,'FECHA',0,0,'L');    
+                 $pdf->SetXY(10,57);
+                 $pdf->Cell(20,10,'FECHA',0,0,'L');
                  $pdf->SetXY(25,57);
-                 $pdf->Cell(20,10,'ASIGNATURA',0,0,'L');    
+                 $pdf->Cell(20,10,'ASIGNATURA',0,0,'L');
                  $pdf->SetXY(130,57);
-                 $pdf->Cell(20,10,'CALIFICACION',0,0,'L');    
+                 $pdf->Cell(20,10,'CALIFICACION',0,0,'L');
                  $pdf->SetXY(160,57);
-                 $pdf->Cell(20,10,'LIBRO',0,0,'L');    
+                 $pdf->Cell(20,10,'LIBRO',0,0,'L');
                  $pdf->SetXY(176,57);
-                 $pdf->Cell(20,10,'FOLIO',0,0,'L');   
+                 $pdf->Cell(20,10,'FOLIO',0,0,'L');
 
-                 $y=60;   
-              }                 
-  
-    
+                 $y=60;
+              }
+
+
         } // end foreach
         $pdf->SetXY(160,$y+10);
         $promedio=number_format($sumanotas / $contadortotal, 2);
-        $pdf->Cell(50,10,'CANTIDAD TOTAL:'.$contadortotal,0,0,'L'); 
+        $pdf->Cell(50,10,'CANTIDAD TOTAL:'.$contadortotal,0,0,'L');
         $pdf->SetXY(160,$y+16);
-        $pdf->Cell(50,10,'PROMEDIO:'.$promedio,0,0,'L'); 
-    
+        $pdf->Cell(50,10,'PROMEDIO:'.$promedio,0,0,'L');
+
     } // fin (if*1)
-      
+
     $this->Pie($pdf, 1);
 
     $pdf->Output('planilla.pdf', 'I');
- 
+
     // stop symfony process
     throw new sfStopException();
-    
-      return sfView::NONE;        
-    
-    
-               
-  }   
+
+      return sfView::NONE;
+
+
+
+  }
 
   function Pie($_pdf, $idArea)
   {
-      
+
     // Rectangulo Página completa
     $_pdf->Rect(9,15,190,281);
-    
+
     //Asigna el ancho de la linea
     $_pdf->SetLineWidth(0);
     // Linea horizontal que separa el pie y el documento
     $_pdf->Line(9,284,199,284);
     $_pdf->SetY(-14);
-    
-    // Muestra la imagen del Logo de la UCU con direccion dependientdo de parametro 
+
+    // Muestra la imagen del Logo de la UCU con direccion dependientdo de parametro
     if (($idArea==25) or ($idArea==21) or ($idArea==20) or ($idArea==18) or ($idArea==4)) {
         $_pdf->Image('images/PieSIG-UCU-GCHU.jpg',11,285,188);
     } elseif ($idArea==17) {
@@ -1235,12 +1240,12 @@ Sede: '.$oSede.'
     } else {
        $_pdf->Image('images/PieSIG-UCU.jpg' , 10, 285, 180, 8, '', '', '', true, 100);
     }
-    
+
       // Set font
     $_pdf->SetFont('helvetica', 'I', 8);
     // Page number
     $_pdf->Cell(0, 10, 'Página '.$_pdf->PageNo().'/{nb}', 0, false, 'L', 0, '', 0, false, 'T', 'M');
-  
+
 
 }
 
