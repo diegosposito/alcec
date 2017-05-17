@@ -390,7 +390,7 @@ class PersonasTable extends Doctrine_Table
     }
 
     // Busca todas los alumnos segun los criterios
-    public static function obtenerCobradores()
+    public static function obtenerCobradores() 
     {
 
             $q = Doctrine_Manager::getInstance()->getCurrentConnection()->fetchAssoc("
