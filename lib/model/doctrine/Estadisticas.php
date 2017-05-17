@@ -96,6 +96,20 @@ class Estadisticas extends sfDoctrineRecord
         return $resultado;		     
 	}
 
+	public function obtenerResumenCobradorPorPeriodo($anio, $mes, $idcobrador=1) {
+
+		// Set the charset
+		Doctrine_Manager::getInstance()->setCharset('utf8');
+		Doctrine_Manager::getInstance()->setCollate('utf8_general_ci');
+
+		$sql = "select idcobrador, count(distinct id) as cantidad, monto, sum(monto) as subtotal from recibos_generados where mes = ".$mes." AND anio = ".$anio." and idcobrador = ".$idcobrador." 
+group by monto order by idcobrador, monto desc;";
+
+	  	$resultado = Doctrine_Manager::getInstance()->getCurrentConnection()->fetchAssoc($sql);
+
+        return $resultado;		     
+	}
+
 	public function obtenerAspirantesPeriodoGroupFacultad($desde1, $hasta1, $desde2, $hasta2, $idsede, $idtipocarrera) {
 
 		// Set the charset
