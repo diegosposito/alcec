@@ -85,6 +85,9 @@
 					</div>
 				</li>
 				<li>
+					<a title="Resumen Cob." href="<?php echo url_for('informes/cobradores') ?>"><span class="sep-left"></span>Resumen Cob.<span class="sep-right"></span></a>
+				</li>
+				<li>
 					<a title="Ubicacion" href="<?php echo url_for('ingreso/ubicacion') ?>"><span class="sep-left"></span>Ubicación<span class="sep-right"></span></a>
 				</li>
 			</ul>
