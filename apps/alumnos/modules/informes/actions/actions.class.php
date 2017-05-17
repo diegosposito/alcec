@@ -1979,6 +1979,39 @@ class informesActions extends sfActions
 		}		 	
 	}
 
+	public function executeCobradores(sfWebRequest $request)	{
+        
+         $idcobrador = ($request->getParameter('idcobrador')>0) ? $request->getParameter('idcobrador') : 0;
+		
+        if($idcobrador>0){
+            $this->oCobrador= Doctrine_Core::getTable('Personas')->find($idcobrador);
+		} 
+
+	    $this->cobradores = Doctrine_Core::getTable('Personas')->obtenerCobradores();
+
+	    $this->idcobrador = $idcobrador;
+
+        $oEstadistica = new Estadisticas();
+        $this->arrMeses = array(1=>'Enero',2=>'Febrero',3=>'Marzo',4=>'Abril',5=>'Mayo',6=>'Junio',7=>'Julio',8=>'Agosto',9=>'Setiembre',10=>'Octubre',11=>'Noviembre',12=>'Diciembre');
+
+		if ($request->isMethod('post')) {		
+            $this->anioseleccionado = $request->getParameter('idanio');
+            
+            $this->meseleccionado = 1;
+            if($request->getParameter('idmes')>0)
+            	$this->meseleccionado = $request->getParameter('idmes');
+
+            $this->idcobrador = 1;
+            if($request->getParameter('idcobrador')>0)
+            	$this->idcobrador = $request->getParameter('idcobrador');
+
+         	
+			// Obtener resumen estadistico
+			$this->resultadoss =  $oEstadistica->obtenerResumenCobradorPorPeriodo($request->getParameter('idanio'),$this->meseleccionado,$this->idcobrador);
+            
+        }		 	
+	}
+
 	// Plan de estudios (PDF)
 	public function executePadronsociospdf(sfWebRequest $request)	{	
 
@@ -2045,6 +2078,9 @@ class informesActions extends sfActions
  			$y = $y + 5;  
 		 	// add a page
 			if($y>=265) {
+				$pdf->SetY(-35);
+                $pdf->SetFont("Times","B",8);
+                $pdf->Cell(0,10,'                    Pag. '.$pdf->PageNo(),0,0,'C');
 				$pdf->AddPage();
 
 				$encabezado = '
@@ -2054,10 +2090,14 @@ class informesActions extends sfActions
 	
 				$pdf->writeHTML($encabezado, true, false, true, false, '');   
 				$y=45;
+				$pdf->SetFont("Times", "", 9);
 
 			}
 	
 		    } // fin (foreach)	
+		    $pdf->SetY(250);
+		    $pdf->SetFont("Times","B",8);
+            $pdf->Cell(0,10,'                    Pag. '.$pdf->PageNo(),0,0,'C');
 
 			 
 		$pdf->Output('planilla.pdf', 'I');
