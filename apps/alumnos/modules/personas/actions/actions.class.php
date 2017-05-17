@@ -298,13 +298,19 @@ Sede: '.$oSede.'
 		}*/
 
         $resultado = Doctrine_Core::getTable('Personas')->obtenerRecibosGeneradosPorIds($request->getParameter('seleccionar'), $request->getParameter('seleccionar2'),$request->getParameter('idmes'), $request->getParameter('idanio'),$arr_idrecibosgenerados);
+        
+        $cobrador = '';
+        if($request->getParameter('seleccionar2')>0){
+		    $oCobrador = Doctrine_Core::getTable('Personas')->find($request->getParameter('seleccionar2'));
+            $cobrador =  $oCobrador->getApellido().', '.$oCobrador->getNombre();
 
-
+		}    
+      
         // COMIENZA LA IMPRESION DE RECIBOS
 
 		$pdf = new PDF();
 
-		$pdf->SetFont("Times", "B", 12);
+		$pdf->SetFont("Times", "B", 13);
 		$pdf->setPrintHeader(false);
 		$pdf->setPrintFooter(false);
 
@@ -312,7 +318,7 @@ Sede: '.$oSede.'
 		$current_date = date("Y");
 
 		$x=128;
-		$y = 10;
+		$y = 9;
 		$contador = 0;
 		$Ximage = 113;
 		$inicio = 0;
@@ -328,12 +334,12 @@ Sede: '.$oSede.'
 	    	$inicio = $y;
 
 	    	$pdf->Image('images/alcecrecib.png', $Ximage, $Yimage, 80, 0, 'PNG', '', '', false, 300, '', false, false, $border, false, false, false);
-
+            $pdf->SetFont("Times", "B", 13);
 		   	$pdf->SetXY($x,$y);
             $pdf->Cell($x,5,$socio['socio'],0,0,'L');
             $y+=5;
 		    $pdf->SetXY($x,$y);
-		    $pdf->SetFont("Times", "B", 10);
+		    $pdf->SetFont("Times", "B", 11);
 		    $pdf->Cell($x,5,'Recibo nro. '.$socio['id'].'  '.$socio['mesanio'],0,0,'L');
 		    $pdf->SetFont("Times", "B", 12);
 		    $y+=5;
@@ -345,10 +351,10 @@ Sede: '.$oSede.'
 		    $pdf->SetXY($x,$y);
 		    $pdf->Cell($x,5,'$'.$socio['monto'],0,0,'L');
 
-				$pdf->SetFont("Times", "B", 7);
+			$pdf->SetFont("Times", "B", 7);
 		    $pdf->SetXY($x+25,$y);
 		    $pdf->Cell($x+25,5,$socio['tipopago'],0,0,'L');
-				$pdf->SetFont("Times", "B", 12);
+			$pdf->SetFont("Times", "B", 13);
 
 		    $contador++;
 
@@ -361,12 +367,20 @@ Sede: '.$oSede.'
 
 
  			if($y>=250) {
+ 				$pdf->SetY(-40);
+                $pdf->SetFont("Times","B",8);
+                $pdf->Cell(0,10,$cobrador.'    Pag. '.$pdf->PageNo(),0,0,'C');
+
 				$pdf->AddPage();
 				$y=10;
 				$Yimage=2;
 			}
 
 		} // fin (foreach)
+		$pdf->SetY(250);
+        $pdf->SetFont("Times","B",8);
+        $pdf->Cell(0,10,$cobrador.'    Pag. '.$pdf->PageNo(),0,0,'C');
+
 
 
 		$pdf->Output('recibos.pdf', 'I');
