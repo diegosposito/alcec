@@ -33,6 +33,10 @@
        echo "</select>"; ?>
  </p>  
 
+ <?php if ($meseleccionado>0 && $anioseleccionado > 0 && $idcobrador>0) { ?>
+ <a target="_blank" href="<?php echo url_for('informes/cobradorespdf?idcobrador='.$idcobrador.'&idmes='.$meseleccionado.'&idanio='.$anioseleccionado) ?>"><img src='<?php echo $sf_request->getRelativeUrlRoot();?>/images/printer.png' align='center' size='20' /></a>
+ <?php } ?>
+
   <br>
       <div align=center>
       <input type="submit" value="Mostrar" title="Mostrar" id="imprimir" class="form_consulta_enviar" name="Imprimir">       
@@ -42,7 +46,7 @@
  <div align=center>
 <table align="center" cellspacing="0" class="stats">
      <tr>
-                  <td width="40%" align="center" class="hed">Cantidad</td>
+                  <td width="30%" align="center" class="hed">Cantidad</td>
                   <td width="30%" align="center" class="hed">Monto</td>
                   <td width="20%" align="center" class="hed">Subtotal</td>
                  
@@ -51,7 +55,17 @@
     <tr>
       <td align="center"><?php echo $data['cantidad']; ?></td>
       <td align="center"><?php echo $data['monto']; ?></td>
-      <td align="center" class="resaltar_amarillosolido"><?php echo $data['subtotal']; ?></td>
+      <td align="center" class="resaltar_amarillosolido"><?php echo '$'.$data['subtotal']; ?></td>
+    </tr>
+    <?php endforeach; ?>
+    <tr>
+      <td colspan=4><?php echo ''; ?></td>
+    </tr>
+    <?php foreach ($gruposs as $gp): ?>
+     <tr>
+      <td align="center"><?php echo 'Cantidad : '.$gp['cantidad']; ?></td>
+      <td align="center"><?php echo ''; ?></td>
+      <td align="center" class="resaltar_amarillosolido"><?php echo 'Total: $'.$gp['subtotal']; ?></td>
     </tr>
     <?php endforeach; ?>
     <tbody>
