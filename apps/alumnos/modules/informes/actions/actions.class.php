@@ -2008,9 +2008,124 @@ class informesActions extends sfActions
          	
 			// Obtener resumen estadistico
 			$this->resultadoss =  $oEstadistica->obtenerResumenCobradorPorPeriodo($request->getParameter('idanio'),$this->meseleccionado,$this->idcobrador);
+
+			// Obtener resumen estadistico
+			$this->gruposs =  $oEstadistica->obtenerResumenCobradorPorPeriodoGrpCobrador($request->getParameter('idanio'),$this->meseleccionado,$this->idcobrador);
             
         }		 	
 	}
+
+	// Plan de estudios (PDF)
+	public function executeCobradorespdf(sfWebRequest $request)	{	
+
+		$idcobrador = ($request->getParameter('idcobrador')>0) ? $request->getParameter('idcobrador') : 0;
+		
+        if($idcobrador>0){
+            $this->oCobrador= Doctrine_Core::getTable('Personas')->find($idcobrador);
+		} 
+
+	    $this->cobradores = Doctrine_Core::getTable('Personas')->obtenerCobradores();
+
+	    $this->idcobrador = $idcobrador;
+
+        $oEstadistica = new Estadisticas();
+        $this->arrMeses = array(1=>'Enero',2=>'Febrero',3=>'Marzo',4=>'Abril',5=>'Mayo',6=>'Junio',7=>'Julio',8=>'Agosto',9=>'Setiembre',10=>'Octubre',11=>'Noviembre',12=>'Diciembre');
+
+		$this->anioseleccionado = $request->getParameter('idanio');
+            
+        $this->meseleccionado = $request->getParameter('idmes');
+
+        $this->idcobrador = $request->getParameter('idcobrador');
+
+         	
+		// Obtener resumen estadistico
+		$this->resultadoss =  $oEstadistica->obtenerResumenCobradorPorPeriodo($request->getParameter('idanio'),$this->meseleccionado,$this->idcobrador);
+
+		// Obtener resumen estadistico
+		$this->gruposs =  $oEstadistica->obtenerResumenCobradorPorPeriodoGrpCobrador($request->getParameter('idanio'),$this->meseleccionado,$this->idcobrador);
+            
+        		
+  
+		// pdf object
+		$pdf = new PDF();
+
+    	// settings
+		$pdf->SetFont("Times", "", 9);
+		// sentencias para retirar encabezados y pie por defecto
+		$pdf->setPrintHeader(false);
+		$pdf->setPrintFooter(false); 
+ 
+        // add a page
+		$pdf->AddPage();
+		$current_date = date("Y");
+		$encabezado = '
+			<div style="text-align: center; font-family: Times New Roman,Times,serif;"><span
+			style="font-size: 12;"><img src="'.$request->getRelativeUrlRoot().'/images/header.png" height="80px" width="550px">
+			Recibos Cobrador: '.$this->oCobrador->getApellido().', '.$this->oCobrador->getNombre().'&nbsp;&nbsp;'.$this->meseleccionado.'/'.$this->anioseleccionado.'</div>';        
+
+		$pdf->writeHTML($encabezado, true, false, true, false, '');   
+		
+		$y = 45;
+		$pdf->SetXY(10,$y);
+		$pdf->Cell(10,5,'Cantidad',0,0,'C');    
+		$pdf->SetXY(20,$y);
+		$pdf->Cell(80,5,'Importe',0,0,'C');    
+		$pdf->SetXY(20,$y);
+		$pdf->Cell(235,5,'Subtotal',0,0,'C'); 
+		$pdf->SetXY(20,$y);
+		$y = $y + 5;		
+		$contador = 1;
+		
+		$pdf->Line(10,$y,199,$y);
+		
+	    foreach ($this->resultadoss as $resultado){	
+		    			    		
+		   	$pdf->SetXY(0,$y-5);
+            $pdf->SetXY(10,$y);
+		    $pdf->Cell(10,5,$resultado['cantidad'],0,0,'L');
+		    $pdf->SetXY(60,$y);        
+		    $pdf->Cell(80,5,$resultado['monto'],0,0,'L');        
+		    $pdf->SetXY(130,$y); 
+		    $pdf->Cell(10,5,$resultado['subtotal'],0,0,'L'); 
+		    
+		
+ 			$y = $y + 5;  
+		 	// add a page
+			if($y>=265) {
+				$pdf->AddPage();
+
+			$encabezado = '
+			<div style="text-align: center; font-family: Times New Roman,Times,serif;"><span
+			style="font-size: 12;"><img src="'.$request->getRelativeUrlRoot().'/images/header.png" height="80px" width="550px">
+			Recibos Cobrador: '.$this->oCobrador->getApellido().', '.$this->oCobrador->getNombre().'&nbsp;&nbsp;'.$this->meseleccionado.'/'.$this->anioseleccionado.'</div>';        
+     
+	
+				$pdf->writeHTML($encabezado, true, false, true, false, '');   
+				$y=45;
+				$pdf->SetFont("Times", "", 9);
+
+			}
+	
+		    } // fin (foreach)	
+
+		    $y = $y + 10;  
+		    $pdf->SetXY(10,$y);
+
+		    foreach ($this->gruposs as $gp){	
+			    $pdf->Cell(10,5,'Cantidad : '.$gp['cantidad'],0,0,'L');
+			    $pdf->SetXY(130,$y); 
+			    $pdf->Cell(10,5,'Total: '.$gp['subtotal'],0,0,'L'); 
+			}    
+		   
+			 
+		$pdf->Output('cobradores.pdf', 'I');
+ 
+		// stop symfony process
+		throw new sfStopException();
+				
+		return sfView::NONE;
+	}
+	
 
 	// Plan de estudios (PDF)
 	public function executePadronsociospdf(sfWebRequest $request)	{	
