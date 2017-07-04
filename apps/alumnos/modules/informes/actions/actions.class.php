@@ -2168,7 +2168,7 @@ class informesActions extends sfActions
 		$pdf->SetXY(20,$y);
 		$pdf->Cell(40,5,'Nombre',0,0,'C');    
 		$pdf->SetXY(20,$y);
-		$pdf->Cell(120,5,'Dirección',0,0,'C');    
+		$pdf->Cell(180,5,'Dirección',0,0,'C');    
 		$pdf->SetXY(20,$y);
 		$pdf->Cell(295,5,'Monto',0,0,'C'); 
 		$pdf->SetXY(20,$y);
