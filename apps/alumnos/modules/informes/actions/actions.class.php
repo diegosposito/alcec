@@ -2166,11 +2166,13 @@ class informesActions extends sfActions
 		$pdf->SetXY(10,$y);
 		$pdf->Cell(10,5,'Nro',0,0,'C');    
 		$pdf->SetXY(20,$y);
-		$pdf->Cell(80,5,'Nombre',0,0,'C');    
+		$pdf->Cell(40,5,'Nombre',0,0,'C');    
 		$pdf->SetXY(20,$y);
-		$pdf->Cell(235,5,'Monto',0,0,'C'); 
+		$pdf->Cell(120,5,'Dirección',0,0,'C');    
 		$pdf->SetXY(20,$y);
-		$pdf->Cell(280,5,'Forma Pago',0,0,'C'); 
+		$pdf->Cell(295,5,'Monto',0,0,'C'); 
+		$pdf->SetXY(20,$y);
+		$pdf->Cell(330,5,'Forma Pago',0,0,'C'); 
 		$pdf->SetXY(20,$y);
 		$y = $y + 5;		
 		$contador = 1;
@@ -2183,10 +2185,12 @@ class informesActions extends sfActions
             $pdf->SetXY(10,$y);
 		    $pdf->Cell(10,5,$socio['idpersona'],0,0,'L');
 		    $pdf->SetXY(20,$y);        
-		    $pdf->Cell(80,5,$socio['apellido'].', '.$socio['nombre'],0,0,'L');        
-		    $pdf->SetXY(130,$y); 
+		    $pdf->Cell(60,5,$socio['apellido'].', '.$socio['nombre'],0,0,'L');   
+		    $pdf->SetXY(100,$y);        
+		    $pdf->Cell(10,5,$socio['direccion'],0,0,'L');      
+		    $pdf->SetXY(160,$y); 
 		    $pdf->Cell(10,5,$socio['monto'],0,0,'L'); 
-		    $pdf->SetXY(150,$y); 
+		    $pdf->SetXY(175,$y); 
 		    $pdf->Cell(10,5,$socio['tipopago'],0,0,'L'); 
 		    
 		
