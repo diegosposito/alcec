@@ -298,14 +298,14 @@ Sede: '.$oSede.'
 		}*/
 
         $resultado = Doctrine_Core::getTable('Personas')->obtenerRecibosGeneradosPorIds($request->getParameter('seleccionar'), $request->getParameter('seleccionar2'),$request->getParameter('idmes'), $request->getParameter('idanio'),$arr_idrecibosgenerados);
-        
+
         $cobrador = '';
         if($request->getParameter('seleccionar2')>0){
 		    $oCobrador = Doctrine_Core::getTable('Personas')->find($request->getParameter('seleccionar2'));
             $cobrador =  $oCobrador->getApellido().', '.$oCobrador->getNombre();
 
-		}    
-      
+		}
+
         // COMIENZA LA IMPRESION DE RECIBOS
 
 		$pdf = new PDF();
@@ -324,7 +324,7 @@ Sede: '.$oSede.'
 		$inicio = 0;
 		$Yimage = 2;
 
-		$border = array('LRTB' => array('width' => 0.1, 'cap' => 'square', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
+		$border = array('LRTB' => array('width' => 0.0, 'cap' => 'square', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
 
 
 	    foreach ($resultado as $socio){
@@ -333,7 +333,7 @@ Sede: '.$oSede.'
 	    	$x = ($x==28 ? 128 : 28);
 	    	$inicio = $y;
 
-	    	$pdf->Image('images/alcecrecib.png', $Ximage, $Yimage, 80, 0, 'PNG', '', '', false, 300, '', false, false, $border, false, false, false);
+	    	$pdf->Image('images/alcecrecib.png', $Ximage+10, $Yimage+1, 20, 10, 'PNG', '', '', false, 300, '', false, false, 0, false, false, false);
             $pdf->SetFont("Times", "B", 13);
 		   	$pdf->SetXY($x,$y);
             $pdf->Cell($x,5,$socio['socio'],0,0,'L');
@@ -358,15 +358,20 @@ Sede: '.$oSede.'
 
 		    $contador++;
 
+				$pdf->SetLineWidth(0.1);
+				// Linea horizontal que separa las Fechas
+				$pdf->Line(10,$y+10,200,$y+10);
+				$pdf->Line(100,0,100,1000);
+
 		    if (!($contador % 2==0)){
 		    	$y = $inicio;
 		    } else {
-		    	$y+=35;
-		    	$Yimage+=50;
+		    	$y+=25;
+		    	$Yimage+=40;
 		    }
 
 
- 			if($y>=250) {
+ 			if($y>=240) {
  				$pdf->SetY(-40);
                 $pdf->SetFont("Times","B",8);
                 $pdf->Cell(0,10,$cobrador.'    Pag. '.$pdf->PageNo(),0,0,'C');
