@@ -1,10 +1,10 @@
-<h1>Buscador</h1> 
+<h1>Buscador</h1>
 <br>
 <div align="center">
 <form action="<?php echo url_for('personas/buscar') ?>" method="post">
   <table cellspacing="0" class="stats" width="80%">
       <?php echo $form->renderGlobalErrors() ?>
-          
+
       <tr>
         <td><b><?php echo $form['tipocriterio']->renderLabel() ?></b></td>
         <td>
@@ -18,16 +18,16 @@
           <?php echo $form['criterio']->renderError() ?>
           <?php echo $form['criterio'] ?>
         </td>
-      </tr>  
+      </tr>
 	<tr>
 		<?php echo $form->renderHiddenFields(false) ?>
 		<td colspan="2" align="center"><input type="submit" value="Buscar" /></td>
-    </tr>    
+    </tr>
   </table>
 </form>
 <p>Ingrese al menos 3 caracteres para filtrar la búsqueda </p>
 <br>
-<?php if (count($resultado) > 0){ ?>		    	   	
+<?php if (count($resultado) > 0){ ?>
 	<table cellspacing="0" class="stats">
 	    <tr>
 	      <td colspan="6" width="100%">Se han encontrado <?php echo count($resultado); ?> coincidencias de la búsqueda <?php echo $form->getValue('criterio') ?> por <?php if($form->getValue('tipocriterio')==1){ echo "Apellido";} else {echo "Nro. Documento";} ?>.</td>
@@ -35,7 +35,7 @@
 	    <tr>
 	      <td width="5%" align="center" class="hed">Id</td>
 	      <td width="50%" align="center" class="hed">Nombre</td>
-	      <td width="40%" align="center" class="hed">Nro. de Documento</td>
+	      <td width="40%" align="center" class="hed">Dirección</td>
 	      <td width="5%" align="center" class="hed">Activo</td>
 	      <td width="10%" align="center" class="hed">Edicion</td>
 	      <td width="10%" align="center" class="hed">Meses</td>
@@ -47,7 +47,7 @@
 	    <tr class="fila_<?php echo $i%2 ; ?>">
 	      <td width="5%" align="center"><?php echo $item['idpersona'] ?></td>
 	      <td width="50%"><?php echo $item['apellido'].", ".$item['nombre'] ?></td>
-	      <td width="40%" align="center"><?php echo $item['nrodoc'] ?></td>
+	      <td width="40%" align="center"><?php echo $item['direccion'] ?></td>
 	      <td width="5%" align="center"><?php echo $item['activo'] ? "Si" : "No" ?></td>
 	      <td align="center"><?php echo link_to("Editar", 'personas/edit?idpersona='.$item['idpersona'] ,'class="mhead"'); ?></td>
 	      <td align="center"><?php echo link_to("Meses", 'personas/mesescobro?idpersona='.$item['idpersona'] ,'class="mhead"'); ?></td>
@@ -61,5 +61,5 @@
 	  </tbody>
 	</table>
 	<br>
-<?php } ?> 		
+<?php } ?>
 </div>
