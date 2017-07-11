@@ -313,16 +313,20 @@ Sede: '.$oSede.'
 		$pdf->SetFont("Times", "B", 13);
 		$pdf->setPrintHeader(false);
 		$pdf->setPrintFooter(false);
+    $pdf->SetLineWidth(0.1);
 
 		$pdf->AddPage();
-		$current_date = date("Y");
+    $pdf->Line(100,0,100,1000);
+    $Yimage=15;
+		
+    $current_date = date("Y");
 
 		$x=128;
-		$y = 9;
+		$y = 20;
 		$contador = 0;
 		$Ximage = 113;
 		$inicio = 0;
-		$Yimage = 2;
+		$primer_renglon = true;
 
 		$border = array('LRTB' => array('width' => 0.0, 'cap' => 'square', 'join' => 'miter', 'dash' => 0, 'color' => array(0, 0, 0)));
 
@@ -333,10 +337,10 @@ Sede: '.$oSede.'
 	    	$x = ($x==28 ? 128 : 28);
 	    	$inicio = $y;
 
-	    	$pdf->Image('images/alcecrecib.png', $Ximage+10, $Yimage+1, 20, 10, 'PNG', '', '', false, 300, '', false, false, 0, false, false, false);
+	    	$pdf->Image('images/alcecrecib.png', $Ximage+10, $Yimage-5, 20, 10, 'PNG', '', '', false, 300, '', false, false, 0, false, false, false);
             $pdf->SetFont("Times", "B", 13);
 		   	$pdf->SetXY($x,$y);
-            $pdf->Cell($x,5,$socio['socio'],0,0,'L');
+            $pdf->Cell($x,5,substr($socio['socio'],0, 24),0,0,'L');
             $y+=5;
 		    $pdf->SetXY($x,$y);
 		    $pdf->SetFont("Times", "B", 11);
@@ -358,10 +362,8 @@ Sede: '.$oSede.'
 
 		    $contador++;
 
-				$pdf->SetLineWidth(0.1);
 				// Linea horizontal que separa las Fechas
-				$pdf->Line(10,$y+10,200,$y+10);
-				$pdf->Line(100,0,100,1000);
+        $pdf->Line(10,$y+10,200,$y+10); 
 
 		    if (!($contador % 2==0)){
 		    	$y = $inicio;
@@ -377,8 +379,11 @@ Sede: '.$oSede.'
                 $pdf->Cell(0,10,$cobrador.'    Pag. '.$pdf->PageNo(),0,0,'C');
 
 				$pdf->AddPage();
-				$y=10;
-				$Yimage=2;
+       
+        //Linea vertical
+        $pdf->Line(100,0,100,1000);
+				$y=20;
+				$Yimage=15;
 			}
 
 		} // fin (foreach)
