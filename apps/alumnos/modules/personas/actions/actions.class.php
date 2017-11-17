@@ -337,12 +337,19 @@ Sede: '.$oSede.'
 	    	$x = ($x==28 ? 128 : 28);
 	    	$inicio = $y;
 
-	    	$pdf->Image('images/alcecrecib.png', $Ximage+10, $Yimage-5, 20, 10, 'PNG', '', '', false, 300, '', false, false, 0, false, false, false);
-            $pdf->SetFont("Times", "B", 13);
+	    	$pdf->Image('images/alcecsinfondo.png', $Ximage+4, $Yimage-5, 20, 10, 'PNG', '', '', false, 300, '', false, false, 0, false, false, false);
+         
+        $pdf->SetXY($x+6,$y-8);
+        $pdf->SetFont("Times", "B", 11);
+        $pdf->Cell($x,5,'Asociación de Lucha Contra el Cancer',0,0,'L');
+        $pdf->Line($x+6,$y-1,$x+72,$y-1); 
+
+        $pdf->SetFont("Times", "B", 13);
 		   	$pdf->SetXY($x,$y);
-            $pdf->Cell($x,5,substr($socio['socio'],0, 24),0,0,'L');
-            $y+=5;
-		    $pdf->SetXY($x,$y);
+        $pdf->Cell($x,5,substr($socio['socio'],0, 24),0,0,'L');
+        $y+=5;
+		    
+        $pdf->SetXY($x,$y);
 		    $pdf->SetFont("Times", "B", 11);
 		    $pdf->Cell($x,5,'Recibo nro. '.$socio['id'].'  '.$socio['mesanio'],0,0,'L');
 		    $pdf->SetFont("Times", "B", 12);
