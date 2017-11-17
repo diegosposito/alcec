@@ -316,7 +316,10 @@ Sede: '.$oSede.'
     $pdf->SetLineWidth(0.1);
 
 		$pdf->AddPage();
+    $pdf->Line(10,0,10,1000);
     $pdf->Line(100,0,100,1000);
+    $pdf->Line(110,0,110,1000);
+    $pdf->Line(200,0,200,1000);
     $Yimage=15;
 		
     $current_date = date("Y");
@@ -334,15 +337,15 @@ Sede: '.$oSede.'
 	    foreach ($resultado as $socio){
 
 	    	$Ximage = ($Ximage==13 ? 113 : 13);
-	    	$x = ($x==28 ? 128 : 28);
+	    	$x = ($x==23 ? 123 : 23);
 	    	$inicio = $y;
 
-	    	$pdf->Image('images/alcecsinfondo.png', $Ximage+4, $Yimage-5, 20, 10, 'PNG', '', '', false, 300, '', false, false, 0, false, false, false);
+	    	$pdf->Image('images/alcecsinfondo.png', $Ximage-1, $Yimage-5, 20, 10, 'PNG', '', '', false, 300, '', false, false, 0, false, false, false);
          
         $pdf->SetXY($x+6,$y-8);
         $pdf->SetFont("Times", "B", 11);
         $pdf->Cell($x,5,'Asociación de Lucha Contra el Cancer',0,0,'L');
-        $pdf->Line($x+6,$y-1,$x+72,$y-1); 
+        $pdf->Line($x+6,$y-1,$x+77,$y-1); 
 
         $pdf->SetFont("Times", "B", 13);
 		   	$pdf->SetXY($x,$y);
@@ -388,7 +391,10 @@ Sede: '.$oSede.'
 				$pdf->AddPage();
        
         //Linea vertical
+        $pdf->Line(10,0,10,1000);
         $pdf->Line(100,0,100,1000);
+        $pdf->Line(110,0,110,1000);
+        $pdf->Line(200,0,200,1000);
 				$y=20;
 				$Yimage=15;
 			}
