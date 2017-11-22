@@ -313,7 +313,7 @@ Sede: '.$oSede.'
 		$pdf->SetFont("Times", "B", 13);
 		$pdf->setPrintHeader(false);
 		$pdf->setPrintFooter(false);
-    $pdf->SetLineWidth(0.4);
+    $pdf->SetLineWidth(0.6);
 
 		$pdf->AddPage();
     $pdf->Line(10,0,10,1000);
@@ -345,6 +345,7 @@ Sede: '.$oSede.'
         $pdf->SetXY($x+6,$y-8);
         $pdf->SetFont("Times", "B", 11);
         $pdf->Cell($x,5,'Asociación de Lucha Contra el Cancer',0,0,'L');
+        $pdf->SetLineWidth(0.6);
         $pdf->Line($x+6,$y-1,$x+77,$y-1); 
 
         $pdf->SetFont("Times", "B", 13);
@@ -373,6 +374,7 @@ Sede: '.$oSede.'
 		    $contador++;
 
 				// Linea horizontal que separa las Fechas
+        $pdf->SetLineWidth(0.6);
         $pdf->Line(10,$y+10,200,$y+10); 
 
 		    if (!($contador % 2==0)){
@@ -391,6 +393,7 @@ Sede: '.$oSede.'
 				$pdf->AddPage();
        
         //Linea vertical
+        $pdf->SetLineWidth(0.6);
         $pdf->Line(10,0,10,1000);
         $pdf->Line(100,0,100,1000);
         $pdf->Line(110,0,110,1000);
