@@ -313,7 +313,7 @@ Sede: '.$oSede.'
 		$pdf->SetFont("Times", "B", 13);
 		$pdf->setPrintHeader(false);
 		$pdf->setPrintFooter(false);
-    $pdf->SetLineWidth(0.2);
+    $pdf->SetLineWidth(0.4);
 
 		$pdf->AddPage();
     $pdf->Line(10,0,10,1000);
