@@ -316,6 +316,9 @@ Sede: '.$oSede.'
     $pdf->SetLineWidth(0.6);
 
 		$pdf->AddPage();
+    // Linea horizontal que separa las Fechas
+    $pdf->SetLineWidth(0.6);
+    $pdf->Line(10,5,200,5); 
     $pdf->Line(10,0,10,1000);
     $pdf->Line(100,0,100,1000);
     $pdf->Line(110,0,110,1000);
@@ -340,7 +343,7 @@ Sede: '.$oSede.'
 	    	$x = ($x==23 ? 123 : 23);
 	    	$inicio = $y;
 
-	    	$pdf->Image('images/alcecsinfondo.png', $Ximage-1, $Yimage-5, 20, 10, 'PNG', '', '', false, 300, '', false, false, 0, false, false, false);
+	    	$pdf->Image('images/alcecsinfondo.png', $Ximage-3, $Yimage-8, 25, 15, 'PNG', '', '', false, 300, '', false, false, 0, false, false, false);
          
         $pdf->SetXY($x+6,$y-8);
         $pdf->SetFont("Times", "B", 11);
@@ -375,13 +378,14 @@ Sede: '.$oSede.'
 
 				// Linea horizontal que separa las Fechas
         $pdf->SetLineWidth(0.6);
-        $pdf->Line(10,$y+10,200,$y+10); 
+        $pdf->Line(10,$y+12,200,$y+12); 
+        $pdf->Line(10,$y+15,200,$y+15); 
 
 		    if (!($contador % 2==0)){
 		    	$y = $inicio;
 		    } else {
-		    	$y+=25;
-		    	$Yimage+=40;
+		    	$y+=30;
+		    	$Yimage+=45;
 		    }
 
 
@@ -394,6 +398,7 @@ Sede: '.$oSede.'
        
         //Linea vertical
         $pdf->SetLineWidth(0.6);
+        $pdf->Line(10,5,200,5); 
         $pdf->Line(10,0,10,1000);
         $pdf->Line(100,0,100,1000);
         $pdf->Line(110,0,110,1000);
