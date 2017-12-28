@@ -4,7 +4,7 @@
 <form action="<?php echo url_for('informes/cobradores'); ?>" method="post" >
 <p align="center"><b>Período     : </b>
       <select id="idanio" name="idanio">
-      <?php for ($anio = date("Y"); $anio > date("Y")-20; $anio=$anio-1) { ?>
+      <?php for ($anio = date("Y")+1; $anio > date("Y")-20; $anio=$anio-1) { ?>
         <option value="<?php echo $anio ?>" <?php if ($anio == $anioseleccionado) { ?>selected<?php } ?>><?php echo $anio ?></option>
       <?php } ?>
       </select>
