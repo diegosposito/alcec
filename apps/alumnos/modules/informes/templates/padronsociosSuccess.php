@@ -21,6 +21,7 @@
     </tfoot>
     <tbody>
     <input type="hidden" name="idcobrador" value="<?php echo $idcobrador; ?>">
+     <input type="hidden" name="idmodopago" value="<?php echo $idmodopago; ?>">
     <?php if ($mensaje) {?>
       <tr>
         <td colspan="2">
