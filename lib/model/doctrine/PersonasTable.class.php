@@ -246,7 +246,7 @@ class PersonasTable extends Doctrine_Table
         $datos=''; $cantidad=0;
         if ( count($arrPersonas)>0 ){
 
-            foreach($arrPersonas as $info)
+            foreach($arrPersonas as $info) 
                 $datos .= $info.', ';
 
             $datos = substr($datos, 0, strlen($datos)-2);
