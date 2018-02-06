@@ -29,25 +29,43 @@ class informesActions extends sfActions
 	public function executeSocios(sfWebRequest $request)
 	{
 	    $this->profesionaless ='';
+
+	    $this->modos = array(1=>'ANUAL',2=>'SEMESTRAL',4=>'TRIMESTRAL', 12=>'MENSUAL');
  
-	    $idcobrador = ($request->getParameter('seleccionar2')>0) ? $request->getParameter('seleccionar2') : 0;
+	    $idcobrador = ($request->getParameter('seleccionar2')>0) ? $request->getParameter('seleccionar2') : '';
+	    $idmodopago = ($request->getParameter('seleccionar3')>0) ? $request->getParameter('seleccionar3') : '';
 		
-        if($idcobrador>0){
+        if($idcobrador<>''){
             $this->oCobrador= Doctrine_Core::getTable('Personas')->find($idcobrador);
 		} 
 
+        $this->modopago = '';
+		switch ($idmodopago) 
+	    {
+		    case 1:
+		        $this->modopago = 'ANUAL';
+		        break;
+		    case 2:
+		        $this->modopago = 'SEMESTRAL';
+		        break;
+		    case 4:
+		        $this->modopago = 'TRIMESTRAL';
+		        break;
+		    case 12:
+		        $this->modopago = 'ANUAL';
+		        break;
+	    }
+
 	    if ($request->isMethod('post')) {	
 	    	
-	    	if ($idcobrador>0)
-			    $this->profesionaless = Doctrine_Core::getTable('Personas')->obtenerPadronSocios($idcobrador);
-			 else
-			 	$this->profesionaless = Doctrine_Core::getTable('Personas')->obtenerPadronSocios();
-			        
+	    	$this->profesionaless = Doctrine_Core::getTable('Personas')->obtenerPadronSocios($idcobrador, $idmodopago);
+						        
 	    }  
 
 	    $this->cobradores = Doctrine_Core::getTable('Personas')->obtenerCobradores();
 
 	    $this->idcobrador = $idcobrador;
+	    $this->idmodopago = $idmodopago;
 
 	}
 	
@@ -1957,6 +1975,7 @@ class informesActions extends sfActions
 
 	public function executePadronsocios(sfWebRequest $request)	{
 		 $this->idcobrador = ($request->getParameter('idcobrador')>0) ? $request->getParameter('idcobrador') : 0;
+		 $this->idmodopago = ($request->getParameter('idmodopago')>0) ? $request->getParameter('idmodopago') : 0;
 		
        
 	}
@@ -2131,16 +2150,21 @@ class informesActions extends sfActions
 	public function executePadronsociospdf(sfWebRequest $request)	{	
 
 		$idcobrador = $request->getParameter('idcobrador'); $cobrador ='';
+		$idmodopago = $request->getParameter('idmodopago');
+
+		if(!$idmodopago>0)
+			$idmodopago='';
 
 		if ($idcobrador>0){
-		    $oSocios = Doctrine_Core::getTable('Personas')->obtenerPadronSocios($idcobrador);
+		    $oSocios = Doctrine_Core::getTable('Personas')->obtenerPadronSocios($idcobrador, $idmodopago);
 
 		    $oCobrador= Doctrine_Core::getTable('Personas')->find($idcobrador);
 
 		    $cobrador = $oCobrador->getApellido().', '.$oCobrador->getNombre();
 		}
 		else {
-			$oSocios = Doctrine_Core::getTable('Personas')->obtenerPadronSocios();
+			$idcobrador="";
+			$oSocios = Doctrine_Core::getTable('Personas')->obtenerPadronSocios($idcobrador, $idmodopago);
 		}
   
 		// pdf object
