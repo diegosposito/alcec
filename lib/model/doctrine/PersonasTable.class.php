@@ -92,7 +92,7 @@ class PersonasTable extends Doctrine_Table
     }
 
     // Obtener recibos por estado
-    public static function obtenerPadronSocios($idcobrador='')
+    public static function obtenerPadronSocios($idcobrador='', $idmodopago)
     {
         $sql ="SELECT per.idpersona, per.apellido, per.nombre, per.email, per.direccion, per.telefono,
               CASE
@@ -107,6 +107,10 @@ class PersonasTable extends Doctrine_Table
 
         if ($idcobrador <> ""){
           $sql .=  " AND per.idcobrador = ".$idcobrador." ";
+        }
+
+        if ($idmodopago <> ""){
+          $sql .=  " AND meses.cantidad = ".$idmodopago." ";
         }
 
         $sql .=  " ORDER BY per.apellido; ";
