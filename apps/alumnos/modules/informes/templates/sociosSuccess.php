@@ -3,10 +3,23 @@
 <br>
 
 
-<a target="_blank" href="<?php echo url_for('informes/padronsocios?idcobrador='.$idcobrador) ?>"><img src='<?php echo $sf_request->getRelativeUrlRoot();?>/images/printer.png' align='center' size='20' /></a>
+<a target="_blank" href="<?php echo url_for('informes/padronsocios?idcobrador='.$idcobrador.'&idmodopago='.$idmodopago) ?>"><img src='<?php echo $sf_request->getRelativeUrlRoot();?>/images/printer.png' align='center' size='20' /></a>
 
 <form action="<?php echo url_for('informes/socios') ?>" method="post" id="formLista">
 <table cellspacing="0" class="stats">
+ <tr>
+    <td colspan="2" width="10%"><b>Seleccionar Modo Pago:</b></td>
+    <td>
+    <?php
+       echo "<select id='seleccionar3' name='seleccionar3' >";
+       echo "<option SELECTED value=''>-----SELECCIONAR-----</option>";
+       foreach ($modos as $k => $v){
+          echo "<option value=".$k.">".$v."</option>";
+       }
+       echo "</select>";
+     ?>
+    </td>
+  </tr> 
  <tr>
     <td colspan="2" width="10%"><b>Seleccionar Cobrador:</b></td>
     <td>
@@ -25,7 +38,7 @@
           <input type="submit" value="Mostrar Socios" id="botonimprimir" />
         </td>
         <td colspan="2" align="center">
-          <p><?php echo ($idcobrador>0) ? $oCobrador->getApellido().", ".$oCobrador->getNombre() : '' ?></p>
+          <p><?php echo ($idcobrador>0) ? $oCobrador->getApellido().", ".$oCobrador->getNombre() : ''; echo ' ('.$modopago.')' ?></p>
         </td>
   </tr>
      <tr>
