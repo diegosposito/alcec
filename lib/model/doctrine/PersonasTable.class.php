@@ -255,7 +255,7 @@ class PersonasTable extends Doctrine_Table
 
         // actualizar designaciones
         $sql = "UPDATE personas per
-                SET per.monto = ".$nuevoprecio."
+                SET per.monto = ".$nuevoprecio.", updated_at=now() 
             WHERE per.socio AND per.monto = ".$precio." ";
 
         if ($datos<>'')
