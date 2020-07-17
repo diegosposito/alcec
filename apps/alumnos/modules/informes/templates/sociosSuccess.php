@@ -1,5 +1,5 @@
 <br>
-<h1 align="center" style="color:black;">Padron de Socios</h1>
+<h1 align="center" style="color:black;">Padron de Socios <?php echo $modoactivo ?></h1>
 <br>
 
 
@@ -14,6 +14,19 @@
        echo "<select id='seleccionar3' name='seleccionar3' >";
        echo "<option SELECTED value=''>-----SELECCIONAR-----</option>";
        foreach ($modos as $k => $v){
+          echo "<option value=".$k.">".$v."</option>";
+       }
+       echo "</select>";
+     ?>
+    </td>
+  </tr> 
+  <tr>
+    <td colspan="2" width="10%"><b>Seleccionar Activos o Todos:</b></td>
+    <td>
+    <?php
+       echo "<select id='seleccionar4' name='seleccionar4' >";
+       echo "<option SELECTED value=''>-----SELECCIONAR-----</option>";
+       foreach ($socios as $k => $v){
           echo "<option value=".$k.">".$v."</option>";
        }
        echo "</select>";
@@ -44,9 +57,10 @@
      <tr>
                   <td width="30%" align="center" class="hed">Nombre</td>
                   <td width="20%" align="center" class="hed">Dirección</td>
-                  <td width="10%" align="center" class="hed">Teléfono</td>
-                  <td width="10%" align="center" class="hed">Monto</td>
-                  <td width="25%" align="center" class="hed">Pago</td>
+                  <td width="10%" align="center" class="hed">Documento</td>
+                  <td width="8%" align="center" class="hed">Teléfono</td>
+                  <td width="7%" align="center" class="hed">Monto</td>
+                  <td width="20%" align="center" class="hed">Pago</td>
       </tr>
     <tbody>
       <?php $i=0; $ciudad='NULL';?>
@@ -55,9 +69,10 @@
       <tr class="fila_<?php echo $i%2 ; ?>">
           <td width="30%" align="left"><?php echo $profesionales['apellido'].', '.$profesionales['nombre']  ?></td>
           <td width="20%" align="left"><?php echo $profesionales['direccion']  ?></td>
-          <td width="10%" align="left"><?php echo $profesionales['telefono']  ?></td>
-          <td width="10%" align="left"><?php echo $profesionales['monto'] ?></td>
-          <td width="25%" align="left"><?php echo $profesionales['tipopago'] ?></td>
+          <td width="10%" align="left"><?php echo $profesionales['numerodoc']  ?></td>
+          <td width="8%" align="left"><?php echo $profesionales['telefono']  ?></td>
+          <td width="7%" align="left"><?php echo $profesionales['monto'] ?></td>
+          <td width="20%" align="left"><?php echo $profesionales['tipopago'] ?></td>
       </tr>
       <?php $i++; ?>
       <?php } ?>
@@ -67,4 +82,5 @@
     </tbody>
     
   </table>
+  <?php echo "Total: ".$i; ?>
   </form>
