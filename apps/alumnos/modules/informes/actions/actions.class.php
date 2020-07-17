@@ -31,9 +31,12 @@ class informesActions extends sfActions
 	    $this->profesionaless ='';
 
 	    $this->modos = array(1=>'ANUAL',2=>'SEMESTRAL',4=>'TRIMESTRAL', 12=>'MENSUAL');
+
+	    $this->socios = array(1=>'ACTIVOS',2=>'TODOS');
  
 	    $idcobrador = ($request->getParameter('seleccionar2')>0) ? $request->getParameter('seleccionar2') : '';
 	    $idmodopago = ($request->getParameter('seleccionar3')>0) ? $request->getParameter('seleccionar3') : '';
+	    $idactivo = ($request->getParameter('seleccionar4')>0) ? $request->getParameter('seleccionar4') : '';
 		
         if($idcobrador<>''){
             $this->oCobrador= Doctrine_Core::getTable('Personas')->find($idcobrador);
@@ -56,9 +59,20 @@ class informesActions extends sfActions
 		        break;
 	    }
 
+	    $this->idactivo = '';
+		switch ($idactivo) 
+	    {
+		    case 1:
+		        $this->modoactivo = 'Activos';
+		        break;
+		    case 2:
+		        $this->modoactivo = 'Completo';
+		        break;
+		}
+
 	    if ($request->isMethod('post')) {	
 	    	
-	    	$this->profesionaless = Doctrine_Core::getTable('Personas')->obtenerPadronSocios($idcobrador, $idmodopago);
+	    	$this->profesionaless = Doctrine_Core::getTable('Personas')->obtenerPadronSocios($idcobrador, $idmodopago, $idactivo);
 						        
 	    }  
 
@@ -2156,7 +2170,7 @@ class informesActions extends sfActions
 			$idmodopago='';
 
 		if ($idcobrador>0){
-		    $oSocios = Doctrine_Core::getTable('Personas')->obtenerPadronSocios($idcobrador, $idmodopago);
+		    $oSocios = Doctrine_Core::getTable('Personas')->obtenerPadronSocios($idcobrador, $idmodopago, 1);
 
 		    $oCobrador= Doctrine_Core::getTable('Personas')->find($idcobrador);
 
@@ -2164,7 +2178,7 @@ class informesActions extends sfActions
 		}
 		else {
 			$idcobrador="";
-			$oSocios = Doctrine_Core::getTable('Personas')->obtenerPadronSocios($idcobrador, $idmodopago);
+			$oSocios = Doctrine_Core::getTable('Personas')->obtenerPadronSocios($idcobrador, $idmodopago,1);
 		}
   
 		// pdf object
@@ -2190,9 +2204,11 @@ class informesActions extends sfActions
 		$pdf->SetXY(10,$y);
 		$pdf->Cell(10,5,'Nro',0,0,'C');    
 		$pdf->SetXY(20,$y);
-		$pdf->Cell(40,5,'Nombre',0,0,'C');    
+		$pdf->Cell(30,5,'Nombre',0,0,'C');    
 		$pdf->SetXY(20,$y);
-		$pdf->Cell(180,5,'Dirección',0,0,'C');    
+		$pdf->Cell(150,5,'Dirección',0,0,'C');    
+		$pdf->SetXY(20,$y);
+		$pdf->Cell(250,5,'Documento',0,0,'C');    
 		$pdf->SetXY(20,$y);
 		$pdf->Cell(295,5,'Monto',0,0,'C'); 
 		$pdf->SetXY(20,$y);
@@ -2210,8 +2226,10 @@ class informesActions extends sfActions
 		    $pdf->Cell(10,5,$socio['idpersona'],0,0,'L');
 		    $pdf->SetXY(20,$y);        
 		    $pdf->Cell(60,5,$socio['apellido'].', '.$socio['nombre'],0,0,'L');   
-		    $pdf->SetXY(100,$y);        
-		    $pdf->Cell(10,5,$socio['direccion'],0,0,'L');      
+		    $pdf->SetXY(80,$y);        
+		    $pdf->Cell(10,5,$socio['direccion'],0,0,'L');
+		    $pdf->SetXY(140,$y); 
+		    $pdf->Cell(10,5,$socio['numerodoc'],0,0,'L');       
 		    $pdf->SetXY(160,$y); 
 		    $pdf->Cell(10,5,$socio['monto'],0,0,'L'); 
 		    $pdf->SetXY(175,$y); 
