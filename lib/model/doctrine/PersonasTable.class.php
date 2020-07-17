@@ -92,9 +92,9 @@ class PersonasTable extends Doctrine_Table
     }
 
     // Obtener recibos por estado
-    public static function obtenerPadronSocios($idcobrador='', $idmodopago)
+    public static function obtenerPadronSocios($idcobrador='', $idmodopago='', $idactivo='')
     {
-        $sql ="SELECT per.idpersona, per.apellido, per.nombre, per.email, per.direccion, per.telefono,
+        $sql ="SELECT per.idpersona, per.apellido, per.nombre, per.email, per.direccion, per.telefono, per.numerodoc, 
               CASE
               WHEN meses.cantidad =1 THEN 'ANUAL'
               WHEN meses.cantidad =4 THEN 'TRIMESTRAL'
@@ -103,7 +103,7 @@ class PersonasTable extends Doctrine_Table
              END as tipopago, per.monto
               FROM personas per
                 LEFT JOIN (SELECT idpersona, COUNT(DISTINCT(id)) as cantidad FROM meses_cobro GROUP BY idpersona) as meses ON per.idpersona =meses.idpersona
-                WHERE per.socio AND per.activo ";
+                WHERE per.socio ";
 
         if ($idcobrador <> ""){
           $sql .=  " AND per.idcobrador = ".$idcobrador." ";
@@ -112,6 +112,15 @@ class PersonasTable extends Doctrine_Table
         if ($idmodopago <> ""){
           $sql .=  " AND meses.cantidad = ".$idmodopago." ";
         }
+
+        if ($idactivo == "1"){
+          $sql .=  " AND per.activo = 1 ";
+        } 
+        else 
+        {
+          $sql .=  " ";
+        }
+
 
         $sql .=  " ORDER BY per.apellido; ";
 
